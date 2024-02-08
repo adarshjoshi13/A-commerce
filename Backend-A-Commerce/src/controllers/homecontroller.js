@@ -21,7 +21,7 @@ const Authentication = async (req, res) => {
     Transporter.sendMail(MailOption).then((info) => {
 
         if (info.accepted) {
-
+            console.log(`Email sent successfully to ${info.accepted} with OTP ${OTP}`)
             return res.json({ msg: `Email sent successfully to ${info.accepted} with OTP ${OTP}`, otp: OTP, applicant: info.accepted })
         }
 

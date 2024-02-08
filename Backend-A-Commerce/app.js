@@ -14,7 +14,6 @@ app.use(cors({
 app.post('/authentication', homecontroller.Authentication);
 
 
-
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
