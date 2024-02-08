@@ -1,27 +1,78 @@
+import { useEffect } from "react"
+import { useRef } from "react"
+import { useState } from "react"
 
-const OtpForm = () => {
+const OtpForm = ({ ApplicantData }) => {
+
+    const [OTP, setOTP] = useState(new Array((ApplicantData.otp).toString().length).fill(""))
+    let inputRefs = useRef([])
+
+    useEffect(() => {
+        if (inputRefs.current[0]) {
+            inputRefs.current[0].focus()
+        }
+    }, [])
+
+    function handleLogin(otp) {
+
+        console.log(otp, "login successfull")
+
+    }
+
+    function handleChange(e, index) {
+
+        const value = e.target.value;
+        const newOTP = [...OTP]
+
+        if (isNaN(value)) {
+            return
+        }
+
+        newOTP[index] = value.slice(value.length - 1)
+        setOTP(newOTP)
+
+        const FinalOTP = newOTP.join("")
+        if (FinalOTP.length == OTP.length && +FinalOTP === (ApplicantData.otp)) {
+            handleLogin(FinalOTP)
+        }
+
+        if (value && index < OTP.length - 1 && inputRefs.current[index + 1]) {
+            inputRefs.current[index + 1].focus()
+        }
+    }
+
+    function handleClick(index) {
+    }
+
+    function handleKeyDown(e, index) {
+    }
     return (
         <>
-
-
             <div className="modal fade show d-block" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
-                        <div className="modal-header d-flex justify-content-center">
+                        <div className="modal-header d-flex flex-column justify-content-center">
                             <h1 className="modal-title fs-5" id="exampleModalLabel">Enter The OTP</h1>
+                            <p className="m-0"> OTP have been sent to <b>{ApplicantData.applicantmail[0]} </b></p>
                         </div>
-                        <div className="modal-body">
+                        <div className="modal-body py-3 px-0">
                             <form>
-
-                                <div className="mb-3">
-                                    <input type="password" className="form-control" id="OTP" />
+                                <div className="my-3 d-flex">
+                                    {OTP.map((value, index) => {
+                                        return (
+                                            <input
+                                                key={index}
+                                                ref={(input) => (inputRefs.current[index] = input)}
+                                                type="text"
+                                                className="form-control mx-2"
+                                                value={value}
+                                                onChange={(e) => { handleChange(e, index) }}
+                                                onClick={() => { handleClick(index) }}
+                                                onKeyDown={(e) => { handleKeyDown(e, index) }}
+                                            />
+                                        )
+                                    })}
                                 </div>
-                                
-                                <div className="mb-3 d-flex justify-content-center">
-                                <button type="submit" className="btn btn-primary">Submit</button>
-                                </div>
-
-
                             </form>
                         </div>
                     </div>
