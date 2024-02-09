@@ -1,9 +1,10 @@
 import { useEffect } from "react"
 import { useRef } from "react"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 const OtpForm = ({ ApplicantData }) => {
-
+    const Navigate = useNavigate()
     const [OTP, setOTP] = useState(new Array((ApplicantData.otp).toString().length).fill(""))
     let inputRefs = useRef([])
 
@@ -14,9 +15,10 @@ const OtpForm = ({ ApplicantData }) => {
     }, [])
 
     function handleLogin(otp) {
-
-        console.log(otp, "login successfull")
-
+        console.log("login succesfull")
+        return (
+            Navigate('/login')
+        )
     }
 
     function handleChange(e, index) {
@@ -41,11 +43,14 @@ const OtpForm = ({ ApplicantData }) => {
         }
     }
 
-    function handleClick(index) {
+    function handleKeyDown(e, index) {
+
+        const key = e.key
+        if (key === "Backspace" && !OTP[index] && index > 0) {
+            inputRefs.current[index - 1].focus();
+        }
     }
 
-    function handleKeyDown(e, index) {
-    }
     return (
         <>
             <div className="modal fade show d-block" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -67,7 +72,6 @@ const OtpForm = ({ ApplicantData }) => {
                                                 className="form-control mx-2"
                                                 value={value}
                                                 onChange={(e) => { handleChange(e, index) }}
-                                                onClick={() => { handleClick(index) }}
                                                 onKeyDown={(e) => { handleKeyDown(e, index) }}
                                             />
                                         )
