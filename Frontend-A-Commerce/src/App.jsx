@@ -1,9 +1,9 @@
 import Navbar from './components/navbar'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './pages/home'
-import ProductPage from './pages/productpage'
+import ProductPage from './pages/productPage'
 import SignUpPage from './pages/signUpPage'
-import LoginPage from './pages/loginUpPage'
+import LoginPage from './pages/loginPage'
 
 function App() {
 

@@ -1,7 +1,7 @@
 var express = require('express');
 const cors = require('cors');
 const homecontroller = require('./src/controllers/homecontroller');
-const { Connection} = require('./src/models/index')
+const { Connection } = require('./src/models/index')
 require('dotenv').config();
 
 const app = express();
@@ -19,8 +19,10 @@ Connection()
 
 
 app.post('/authentication', homecontroller.Authentication);
+app.post('/register', homecontroller.Register);
+app.post('/login', homecontroller.Login);
 
 app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}`);
+  console.log(`Server is running on port ${process.env.PORT}`);
 });
 

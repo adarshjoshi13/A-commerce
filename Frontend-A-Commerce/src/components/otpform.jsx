@@ -3,7 +3,7 @@ import { useRef } from "react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-const OtpForm = ({ ApplicantData,RegisterFunc }) => {
+export default function OtpForm({ ApplicantData, RegisterFunc }) {
     const Navigate = useNavigate()
     const [OTP, setOTP] = useState(new Array((ApplicantData.otp).toString().length).fill(""))
     let inputRefs = useRef([])
@@ -14,8 +14,8 @@ const OtpForm = ({ ApplicantData,RegisterFunc }) => {
         }
     }, [])
 
-    function handleLogin() {
-        RegisterFunc()
+    function handleLogin(otp) {
+        RegisterFunc(otp)
     }
 
     function handleChange(e, index) {
@@ -32,7 +32,7 @@ const OtpForm = ({ ApplicantData,RegisterFunc }) => {
 
         const FinalOTP = newOTP.join("")
         if (FinalOTP.length == OTP.length && +FinalOTP === (ApplicantData.otp)) {
-            handleLogin()
+            handleLogin(FinalOTP)
         }
 
         if (value && index < OTP.length - 1 && inputRefs.current[index + 1]) {
@@ -83,5 +83,3 @@ const OtpForm = ({ ApplicantData,RegisterFunc }) => {
         </>
     )
 }
-
-export default OtpForm

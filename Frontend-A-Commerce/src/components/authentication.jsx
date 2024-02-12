@@ -1,6 +1,4 @@
-
-
-const Authetication = () => {
+export default function Authetication() {
     return (
         <>
             <div>
@@ -14,5 +12,3 @@ const Authetication = () => {
         </>
     )
 }
-
-export default Authetication

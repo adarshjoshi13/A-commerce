@@ -1,15 +1,17 @@
 const nodemailer = require('nodemailer');
-const { GetOtpsModel } = require('../models/index')
+const { GetOtps, Customers } = require('../models/index')
+const bcrypt = require('bcrypt');
+const { Sequelize } = require('sequelize');
 
 const Authentication = async (req, res) => {
     let OTP = await Math.max(100001, Math.round(Math.random() * 999998))
 
-    GetOtpsModel.create({
+    GetOtps.create({
         mobile: req.body.number,
         generate_otp: OTP,
         is_verify: 0
-      })
-    
+    })
+
 
     let Transporter = nodemailer.createTransport({
         service: "gmail",
@@ -38,4 +40,85 @@ const Authentication = async (req, res) => {
 
 }
 
-module.exports = { Authentication } 
+const Register = async (req, res) => {
+    try {
+
+        const UpdateUserVerification = await GetOtps.update(
+            { is_verify: 1 },
+            { where: { generate_otp: req.body.OTP } }
+        )
+
+        if (UpdateUserVerification) {
+            const Password = await bcrypt.hash(req.body.password, 10);
+
+            const RegisterCustomer = await Customers.create({
+                full_name: req.body.name,
+                mobile: req.body.number,
+                email: req.body.email,
+                password: Password
+            })
+
+            if (RegisterCustomer) {
+                res.status(200).json({ msg: "User Added Successfully", name: req.body.name })
+            }
+        }
+
+
+    } catch (err) {
+
+        console.log("errror found: ", err)
+        res.status(500).json({ error: 'Internal Server Error' })
+
+    }
+
+
+
+}
+
+const Login = async (req, res) => {
+
+    try {
+        const Identifiers = req.body.identifier
+        var isEmail = false;
+
+        for (const Identifier of Identifiers) {
+
+            function asynchronousOperation(Identifier) {
+                if (Identifier == '@') {
+                    console.log(true)
+                    isEmail = true
+                }
+            }
+            await asynchronousOperation(Identifier)
+
+        }
+
+        const User = await Customers.findOne({
+            where: isEmail ?
+                { email: req.body.identifier } : { mobile: req.body.identifier }
+        })
+
+        if (!User) {
+            res.status(400).json({ msg: "Wrong Phone Number Or Password!" })
+        }
+        const userhash = User.dataValues.password
+
+        console.log(req.body.password)
+        console.log(userhash)
+        const UserIdConfirmation = await bcrypt.compare(req.body.password, userhash)
+
+        console.log(UserIdConfirmation)
+
+        if (UserIdConfirmation) {
+            res.status(200).json({ msg: "User Login Successfully!" })
+        } else {
+            res.status(400).json({ msg: "Wrong Password Successfully!" })
+        }
+
+    } catch (err) {
+        res.status(400).json({ error: `Error found: ${err}` });
+    }
+
+}
+
+module.exports = { Authentication, Register, Login } 

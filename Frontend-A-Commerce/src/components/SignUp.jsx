@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Alert from './alert'
 import OtpForm from './otpform'
-const SignUp = () => {
+import { useNavigate } from 'react-router-dom';
 
+export default function SignUp() {
+  const Navigate = useNavigate()
   const [alert, setAlert] = useState()
   const [ApplicantData, setApplicantData] = useState({})
   const [FormVisbile, setFormVisbile] = useState(true)
@@ -15,7 +17,16 @@ const SignUp = () => {
     Cpassword: '',
   });
 
-  const Register = ()=> {
+  const Register = async (otp) => {
+
+    const response = await axios.post('http://localhost:3000/register', { ...formData, OTP: otp }, {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+
+    Navigate('/login')
+
 
   }
 
@@ -85,14 +96,12 @@ const SignUp = () => {
             </div>
             <button type="submit" className="btn btn-primary">Submit</button>
           </form>
-        </div> : <OtpForm 
-        ApplicantData={ApplicantData}
-        RegisterFunc={Register}
+        </div> : <OtpForm
+          ApplicantData={ApplicantData}
+          RegisterFunc={Register}
         />
       }
 
     </>
   );
 };
-
-export default SignUp;
