@@ -4,6 +4,13 @@ const { GetOtpsModel } = require('../models/index')
 const Authentication = async (req, res) => {
     let OTP = await Math.max(100001, Math.round(Math.random() * 999998))
 
+    GetOtpsModel.create({
+        mobile: req.body.number,
+        generate_otp: OTP,
+        is_verify: 0
+      })
+    
+
     let Transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
@@ -22,7 +29,6 @@ const Authentication = async (req, res) => {
     Transporter.sendMail(MailOption).then((info) => {
 
         if (info.accepted) {
-            console.log(`Email sent successfully to ${info.accepted} with OTP ${OTP}`)
             return res.json({ msg: `Email sent successfully to ${info.accepted} with OTP ${OTP}`, otp: OTP, applicantmail: info.accepted })
         }
 

@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "http://localhost:5000",
   credentials: true,
   optionsSuccessStatus: 200
 }));
@@ -18,15 +18,9 @@ app.use(cors({
 Connection()
 
 
-
 app.post('/authentication', homecontroller.Authentication);
-
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT}`);
 });
-
-
-
-
 

@@ -18,10 +18,10 @@ const Connection = async () => {
         await sequelize.authenticate();
         console.log('PG db connected');
 
-        sequelize.sync().then(() => {
-            console.log('Models synced');
-        }).catch((err) => {
-            console.error('Error syncing models:', err);
+        sequelize.sync().catch((err) => {
+            if(err){
+                console.error('Error syncing models:', err);
+            }
         });
 
     } catch (error) {

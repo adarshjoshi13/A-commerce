@@ -15,6 +15,11 @@ const SignUp = () => {
     Cpassword: '',
   });
 
+  const Register = ()=> {
+
+  }
+
+
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prevData) => ({
@@ -80,7 +85,10 @@ const SignUp = () => {
             </div>
             <button type="submit" className="btn btn-primary">Submit</button>
           </form>
-        </div> : <OtpForm ApplicantData={ApplicantData} />
+        </div> : <OtpForm 
+        ApplicantData={ApplicantData}
+        RegisterFunc={Register}
+        />
       }
 
     </>

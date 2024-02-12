@@ -24,6 +24,13 @@ module.exports = function (sequelize, DataTypes) {
             validate: {
                 notEmpty: true
             }
+        },
+        is_verify: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
         }
     }, {
         sequelize,
