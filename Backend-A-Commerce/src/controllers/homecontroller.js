@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const { GetOtpsModel } = require('../models/index')
 
 const Authentication = async (req, res) => {
     let OTP = await Math.max(100001, Math.round(Math.random() * 999998))
