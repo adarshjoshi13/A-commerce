@@ -1,6 +1,9 @@
-const Login = () => {
+const LoginPage = () => {
     return (
         <>
+
+
+            <h1>Welcome To A-commerce </h1>
             <form>
                 <div className="mb-3">
                     <label for="exampleInputEmail1" className="form-label">Email address</label>
@@ -16,3 +19,5 @@ const Login = () => {
         </>
     )
 }
+
+export default LoginPage

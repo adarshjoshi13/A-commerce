@@ -22,7 +22,7 @@ const Authentication = async (req, res) => {
 
         if (info.accepted) {
             console.log(`Email sent successfully to ${info.accepted} with OTP ${OTP}`)
-            return res.json({ msg: `Email sent successfully to ${info.accepted} with OTP ${OTP}`, otp: OTP, applicant: info.accepted })
+            return res.json({ msg: `Email sent successfully to ${info.accepted} with OTP ${OTP}`, otp: OTP, applicantmail: info.accepted })
         }
 
     }).catch((err) => {
