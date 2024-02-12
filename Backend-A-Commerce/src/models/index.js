@@ -10,13 +10,23 @@ const sequelize = new Sequelize(process.env.PG_CONNECTION_URI, {
     },
 });
 
+const GetOtpsModel = require('./getotps')(sequelize, Sequelize);
+
 const Connection = async () => {
     try {
+        
         await sequelize.authenticate();
-        console.log('PG database connected successfully');
+        console.log('PG db connected');
+
+        sequelize.sync().then(() => {
+            console.log('Models synced');
+        }).catch((err) => {
+            console.error('Error syncing models:', err);
+        });
+
     } catch (error) {
         console.error('PG database connection error:', error);
     }
 };
 
-module.exports = { Connection };
+module.exports = { Connection, GetOtpsModel }
