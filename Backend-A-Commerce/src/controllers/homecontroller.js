@@ -1,7 +1,10 @@
 const nodemailer = require('nodemailer');
 const { GetOtps, Customers } = require('../models/index')
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const { Sequelize } = require('sequelize');
+require('dotenv').config();
+
 
 const Authentication = async (req, res) => {
     let OTP = await Math.max(100001, Math.round(Math.random() * 999998))
@@ -11,7 +14,6 @@ const Authentication = async (req, res) => {
         generate_otp: OTP,
         is_verify: 0
     })
-
 
     let Transporter = nodemailer.createTransport({
         service: "gmail",
@@ -76,7 +78,6 @@ const Register = async (req, res) => {
 const Login = async (req, res) => {
 
     try {
-        req.session.msg = "helllo bhaishaab"
         const Identifiers = req.body.identifier
         var isEmail = false;
 
@@ -84,7 +85,6 @@ const Login = async (req, res) => {
 
             function asynchronousOperation(Identifier) {
                 if (Identifier == '@') {
-                    console.log("Is Email Id")
                     isEmail = true
                 }
             }
@@ -105,7 +105,14 @@ const Login = async (req, res) => {
         const UserIdConfirmation = await bcrypt.compare(req.body.password, userhash)
 
         if (UserIdConfirmation) {
-            console.log(req.session,"check session")
+            if (User.dataValues.token == null) {
+                const token = await jwt.sign(User.dataValues, process.env.SECRET_KEY, { expiresIn: '48h' })
+                const updateData = await Customers.update({ token }, { where: { mobile: User.dataValues.mobile } });
+                res.cookie('jwtoken', token, {
+                    expires: new Date(Date.now() + 48 * 60 * 60 * 1000)
+                })
+            }
+
             res.status(200).json({ msg: "User Login Successfully!" })
         } else {
             res.status(400).json({ msg: "Wrong Password Successfully!" })
@@ -117,9 +124,4 @@ const Login = async (req, res) => {
 
 }
 
-const Test = (req, res)=> {
-    req.session.msg = "hello bhaishaab"
-    res.end()
-}
-
-module.exports = { Authentication, Register, Login, Test } 
+module.exports = { Authentication, Register, Login } 

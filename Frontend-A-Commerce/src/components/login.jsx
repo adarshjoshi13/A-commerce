@@ -24,10 +24,11 @@ export default function Login() {
             const response = await axios.post('http://localhost:3000/login', FormData, {
                 headers: {
                     "Content-Type": "application/json"
-                }
+                },
+                withCredentials: true,
             })
             console.log(response)
-            
+
         } catch (err) {
             console.log(err)
         }

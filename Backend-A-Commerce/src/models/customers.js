@@ -40,7 +40,12 @@ module.exports = function (sequelize, DataTypes) {
             validate: {
                 notEmpty: true
             }
+        },
+        token: {
+            type: DataTypes.TEXT,
+            allowNull: true
         }
+
     }, {
         sequelize,
         tableName: 'customers',
