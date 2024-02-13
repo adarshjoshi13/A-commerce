@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom"
 
-
-
-const Product = (props) => {
+export default function Product(props) {
     return (
         <>
             <div id={props.id} className="product-box p-3 d-flex flex-column justify-content-center align-content-center m-2 my-5">
@@ -15,5 +13,3 @@ const Product = (props) => {
         </>
     )
 }
-
-export default Product

@@ -10,18 +10,19 @@ const sequelize = new Sequelize(process.env.PG_CONNECTION_URI, {
     },
 });
 
-const GetOtpsModel = require('./getotps')(sequelize, Sequelize);
+const GetOtps = require('./getotps')(sequelize, Sequelize);
+const Customers = require('./customers')(sequelize, Sequelize);
 
 const Connection = async () => {
     try {
-        
+
         await sequelize.authenticate();
         console.log('PG db connected');
 
-        sequelize.sync().then(() => {
-            console.log('Models synced');
-        }).catch((err) => {
-            console.error('Error syncing models:', err);
+        sequelize.sync().catch((err) => {
+            if (err) {
+                console.error('Error syncing models:', err);
+            }
         });
 
     } catch (error) {
@@ -29,4 +30,4 @@ const Connection = async () => {
     }
 };
 
-module.exports = { Connection, GetOtpsModel }
+module.exports = { Connection, GetOtps, Customers }

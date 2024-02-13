@@ -1,4 +1,4 @@
-const Alert = (props) => {
+export default function Alert(props) {
     return (
         <>
             {props.message ?
@@ -10,5 +10,3 @@ const Alert = (props) => {
         </>
     )
 }
-
-export default Alert
