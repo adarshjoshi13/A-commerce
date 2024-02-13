@@ -71,13 +71,12 @@ const Register = async (req, res) => {
 
     }
 
-
-
 }
 
 const Login = async (req, res) => {
 
     try {
+        req.session.msg = "helllo bhaishaab"
         const Identifiers = req.body.identifier
         var isEmail = false;
 
@@ -85,7 +84,7 @@ const Login = async (req, res) => {
 
             function asynchronousOperation(Identifier) {
                 if (Identifier == '@') {
-                    console.log(true)
+                    console.log("Is Email Id")
                     isEmail = true
                 }
             }
@@ -103,13 +102,10 @@ const Login = async (req, res) => {
         }
         const userhash = User.dataValues.password
 
-        console.log(req.body.password)
-        console.log(userhash)
         const UserIdConfirmation = await bcrypt.compare(req.body.password, userhash)
 
-        console.log(UserIdConfirmation)
-
         if (UserIdConfirmation) {
+            console.log(req.session,"check session")
             res.status(200).json({ msg: "User Login Successfully!" })
         } else {
             res.status(400).json({ msg: "Wrong Password Successfully!" })
@@ -121,4 +117,9 @@ const Login = async (req, res) => {
 
 }
 
-module.exports = { Authentication, Register, Login } 
+const Test = (req, res)=> {
+    req.session.msg = "hello bhaishaab"
+    res.end()
+}
+
+module.exports = { Authentication, Register, Login, Test } 

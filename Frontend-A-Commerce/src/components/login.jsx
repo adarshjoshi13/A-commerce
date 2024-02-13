@@ -1,8 +1,9 @@
 import axios from "axios"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 export default function Login() {
-
+    const Navigate = useNavigate()
     const [FormData, setFormData] = useState({
         identifier: "",
         password: ""
@@ -25,8 +26,8 @@ export default function Login() {
                     "Content-Type": "application/json"
                 }
             })
-
             console.log(response)
+            
         } catch (err) {
             console.log(err)
         }
