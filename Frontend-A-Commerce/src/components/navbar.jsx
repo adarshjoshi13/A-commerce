@@ -29,6 +29,12 @@ export default function Navbar() {
                             </li>
                         </ul>
 
+                        <div className='mx-3 d-flex justify-content-center align-items-center flex-nowrap'>
+                            <li className='list-unstyled'>
+                                <a href="/my-cart"> <i class="bi bi-cart-fill text-black fs-4"></i></a>
+                            </li>
+                        </div>
+
                         {storedToken ?
                             <li className="nav-item  list-unstyled mx-2" onClick={handleLogout}>
                                 <a className="nav-link fw-bold " href="#" aria-expanded="false">

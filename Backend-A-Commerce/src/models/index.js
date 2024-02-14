@@ -12,6 +12,7 @@ const sequelize = new Sequelize(process.env.PG_CONNECTION_URI, {
 
 const GetOtps = require('./getotps')(sequelize, Sequelize);
 const Customers = require('./customers')(sequelize, Sequelize);
+const Products = require('./products')(sequelize, Sequelize);
 
 const Connection = async () => {
     try {
@@ -30,4 +31,4 @@ const Connection = async () => {
     }
 };
 
-module.exports = { Connection, GetOtps, Customers }
+module.exports = { Connection, GetOtps, Customers, Products }
