@@ -1,6 +1,12 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
+    const Navigate = useNavigate()
+    const storedToken = localStorage.getItem('token');
+    const handleLogout = () => {
+        localStorage.clear();
+        Navigate('/')
+    }
 
     return (
         <>
@@ -23,11 +29,23 @@ export default function Navbar() {
                             </li>
                         </ul>
 
-                        <Link to='/signup'>
-                            <button type="button" className="btn btn-primary">
-                                <i className="my-1 bi fs-4 bi-person-fill"></i>
-                            </button>
-                        </Link>
+                        {storedToken ?
+                            <li className="nav-item  list-unstyled mx-2" onClick={handleLogout}>
+                                <a className="nav-link fw-bold " href="#" aria-expanded="false">
+                                    Log Out
+                                </a>
+                            </li> :
+                            <li className="nav-item dropdown list-unstyled mx-2">
+                                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Account
+                                </a>
+                                <ul className="dropdown-menu">
+                                    <Link to='/login'><a className="dropdown-item">Log In</a></Link>
+                                    <li><hr className="dropdown-divider" /></li>
+                                    <Link to='/signup'><a className="dropdown-item">Sign Up</a></Link>
+                                </ul>
+                            </li>}
+
 
                     </div>
                 </div>

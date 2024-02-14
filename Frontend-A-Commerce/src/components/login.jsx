@@ -1,7 +1,9 @@
 import axios from "axios"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 export default function Login() {
+    const Navigate = useNavigate()
 
     const [FormData, setFormData] = useState({
         identifier: "",
@@ -23,10 +25,11 @@ export default function Login() {
             const response = await axios.post('http://localhost:3000/login', FormData, {
                 headers: {
                     "Content-Type": "application/json"
-                }
+                },
+                withCredentials: true,
             })
-
-            console.log(response)
+            localStorage.setItem('token', response.data.userToken)
+            Navigate('/')
         } catch (err) {
             console.log(err)
         }

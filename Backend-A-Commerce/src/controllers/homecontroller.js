@@ -1,7 +1,10 @@
 const nodemailer = require('nodemailer');
 const { GetOtps, Customers } = require('../models/index')
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const { Sequelize } = require('sequelize');
+require('dotenv').config();
+
 
 const Authentication = async (req, res) => {
     let OTP = await Math.max(100001, Math.round(Math.random() * 999998))
@@ -11,7 +14,6 @@ const Authentication = async (req, res) => {
         generate_otp: OTP,
         is_verify: 0
     })
-
 
     let Transporter = nodemailer.createTransport({
         service: "gmail",
@@ -31,11 +33,13 @@ const Authentication = async (req, res) => {
     Transporter.sendMail(MailOption).then((info) => {
 
         if (info.accepted) {
-            return res.json({ msg: `Email sent successfully to ${info.accepted} with OTP ${OTP}`, otp: OTP, applicantmail: info.accepted })
+            return res.status(200).json({ msg: `Email sent successfully to ${info.accepted} with OTP ${OTP}`, success: true, otp: OTP, applicantmail: info.accepted })
+        } else {
+            return res.status(500).json({ msg: `Email with OTP ${OTP} Not Sent`, success: false })
         }
 
     }).catch((err) => {
-        return res.status(500).json({ err })
+        return res.status(500).json({ ERROR: err })
     })
 
 }
@@ -55,12 +59,18 @@ const Register = async (req, res) => {
                 full_name: req.body.name,
                 mobile: req.body.number,
                 email: req.body.email,
-                password: Password
+                password: Password,
+                token: null
             })
 
             if (RegisterCustomer) {
-                res.status(200).json({ msg: "User Added Successfully", name: req.body.name })
+                res.status(200).json({ msg: "User Added Successfully", success: true, name: req.body.name })
+
+            } else {
+                res.status(500).json({ msg: "Customer not created successfully", success: false, name: req.body.name })
             }
+        } else {
+            res.status(500).json({ msg: "OTP not Updated", success: false })
         }
 
 
@@ -70,8 +80,6 @@ const Register = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' })
 
     }
-
-
 
 }
 
@@ -85,7 +93,7 @@ const Login = async (req, res) => {
 
             function asynchronousOperation(Identifier) {
                 if (Identifier == '@') {
-                    console.log(true)
+
                     isEmail = true
                 }
             }
@@ -99,24 +107,23 @@ const Login = async (req, res) => {
         })
 
         if (!User) {
-            res.status(400).json({ msg: "Wrong Phone Number Or Password!" })
+            res.status(500).json({ msg: "Wrong Phone Number Or Password!", success: false })
         }
         const userhash = User.dataValues.password
 
-        console.log(req.body.password)
-        console.log(userhash)
         const UserIdConfirmation = await bcrypt.compare(req.body.password, userhash)
 
-        console.log(UserIdConfirmation)
-
         if (UserIdConfirmation) {
-            res.status(200).json({ msg: "User Login Successfully!" })
+            let userIdentifier = User.dataValues.Identifiers
+            const token = await jwt.sign({ userIdentifier }, process.env.SECRET_KEY, { expiresIn: '48h' })
+            res.status(200).json({ msg: "User Login Successfully!", success: true, userToken: token })
+
         } else {
-            res.status(400).json({ msg: "Wrong Password Successfully!" })
+            res.status(500).json({ msg: "Wrong Password!", success: false })
         }
 
     } catch (err) {
-        res.status(400).json({ error: `Error found: ${err}` });
+        res.status(500).json({ ERROR: err, success: false });
     }
 
 }

@@ -4,6 +4,7 @@ const homecontroller = require('./src/controllers/homecontroller');
 const { Connection } = require('./src/models/index')
 require('dotenv').config();
 
+
 const app = express();
 
 app.use(express.json());
@@ -14,9 +15,7 @@ app.use(cors({
   optionsSuccessStatus: 200
 }));
 
-
 Connection()
-
 
 app.post('/authentication', homecontroller.Authentication);
 app.post('/register', homecontroller.Register);
