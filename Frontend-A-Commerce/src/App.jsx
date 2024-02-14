@@ -6,7 +6,6 @@ import SignUpPage from './pages/signUpPage'
 import LoginPage from './pages/loginPage'
 
 function App() {
-
   return (
     <>
       <Router>

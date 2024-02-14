@@ -33,11 +33,13 @@ const Authentication = async (req, res) => {
     Transporter.sendMail(MailOption).then((info) => {
 
         if (info.accepted) {
-            return res.json({ msg: `Email sent successfully to ${info.accepted} with OTP ${OTP}`, otp: OTP, applicantmail: info.accepted })
+            return res.status(200).json({ msg: `Email sent successfully to ${info.accepted} with OTP ${OTP}`, success: true, otp: OTP, applicantmail: info.accepted })
+        } else {
+            return res.status(500).json({ msg: `Email with OTP ${OTP} Not Sent`, success: false })
         }
 
     }).catch((err) => {
-        return res.status(500).json({ err })
+        return res.status(500).json({ ERROR: err })
     })
 
 }
@@ -57,12 +59,18 @@ const Register = async (req, res) => {
                 full_name: req.body.name,
                 mobile: req.body.number,
                 email: req.body.email,
-                password: Password
+                password: Password,
+                token: null
             })
 
             if (RegisterCustomer) {
-                res.status(200).json({ msg: "User Added Successfully", name: req.body.name })
+                res.status(200).json({ msg: "User Added Successfully", success: true, name: req.body.name })
+
+            } else {
+                res.status(500).json({ msg: "Customer not created successfully", success: false, name: req.body.name })
             }
+        } else {
+            res.status(500).json({ msg: "OTP not Updated", success: false })
         }
 
 
@@ -85,6 +93,7 @@ const Login = async (req, res) => {
 
             function asynchronousOperation(Identifier) {
                 if (Identifier == '@') {
+
                     isEmail = true
                 }
             }
@@ -98,28 +107,23 @@ const Login = async (req, res) => {
         })
 
         if (!User) {
-            res.status(400).json({ msg: "Wrong Phone Number Or Password!" })
+            res.status(500).json({ msg: "Wrong Phone Number Or Password!", success: false })
         }
         const userhash = User.dataValues.password
 
         const UserIdConfirmation = await bcrypt.compare(req.body.password, userhash)
 
         if (UserIdConfirmation) {
-            if (User.dataValues.token == null) {
-                const token = await jwt.sign(User.dataValues, process.env.SECRET_KEY, { expiresIn: '48h' })
-                const updateData = await Customers.update({ token }, { where: { mobile: User.dataValues.mobile } });
-                res.cookie('jwtoken', token, {
-                    expires: new Date(Date.now() + 48 * 60 * 60 * 1000)
-                })
-            }
+            let userIdentifier = User.dataValues.Identifiers
+            const token = await jwt.sign({ userIdentifier }, process.env.SECRET_KEY, { expiresIn: '48h' })
+            res.status(200).json({ msg: "User Login Successfully!", success: true, userToken: token })
 
-            res.status(200).json({ msg: "User Login Successfully!" })
         } else {
-            res.status(400).json({ msg: "Wrong Password Successfully!" })
+            res.status(500).json({ msg: "Wrong Password!", success: false })
         }
 
     } catch (err) {
-        res.status(400).json({ error: `Error found: ${err}` });
+        res.status(500).json({ ERROR: err, success: false });
     }
 
 }

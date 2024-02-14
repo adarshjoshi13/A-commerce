@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 
 export default function Login() {
     const Navigate = useNavigate()
+
     const [FormData, setFormData] = useState({
         identifier: "",
         password: ""
@@ -27,8 +28,8 @@ export default function Login() {
                 },
                 withCredentials: true,
             })
-            console.log(response)
-
+            localStorage.setItem('token', response.data.userToken)
+            Navigate('/')
         } catch (err) {
             console.log(err)
         }
