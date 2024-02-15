@@ -1,7 +1,7 @@
 const sequelize = require("sequelize")
 
 module.exports = function (sequelize, DataTypes) {
-   return sequelize.define('customers', {
+   return sequelize.define('products', {
       id: {
          type: DataTypes.INTEGER,
          allowNull: false,
@@ -14,42 +14,42 @@ module.exports = function (sequelize, DataTypes) {
       name: {
          type: DataTypes.STRING(50),
          allowNull: false,
-         vallidate: {
+         validate: {
             notEmpty: true
          }
       },
       description: {
          type: DataTypes.TEXT,
          allowNull: false,
-         vallidate: {
+         validate: {
             notEmpty: true
          }
       },
       price: {
-         type: DataTypes.INTEGER(5),
+         type: DataTypes.INTEGER(),
          allowNull: false,
-         vallidate: {
+         validate: {
             notEmpty: true
          }
       },
       imageId: {
-         type: DataTypes.INTEGER(10),
+         type: DataTypes.INTEGER(),
          allowNull: false,
-         vallidate: {
+         validate: {
             notEmpty: true
          }
       },
       categoryId: {
-         type: DataTypes.INTEGER(10),
+         type: DataTypes.INTEGER(),
          allowNull: false,
-         vallidate: {
+         validate: {
             notEmpty: true
          }
       },
       reviewId: {
-         type: DataTypes.INTEGER(10),
+         type: DataTypes.INTEGER(),
          allowNull: false,
-         vallidate: {
+         validate: {
             notEmpty: true
          }
       }

@@ -1,8 +1,10 @@
 import axios from "axios"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "../utilis/Auth"
 
 export default function Login() {
+    const { UserVerification } = useAuth()
     const Navigate = useNavigate()
 
     const [FormData, setFormData] = useState({
@@ -28,10 +30,17 @@ export default function Login() {
                 },
                 withCredentials: true,
             })
-            localStorage.setItem('token', response.data.userToken)
-            Navigate('/')
+            if (response) {
+                let userId = response.data.data.userData.id
+                let token = response.data.data.userToken
+                const VerifiedUserId = await UserVerification(userId)
+                if(VerifiedUserId){
+                    localStorage.setItem('token', token)
+                    Navigate('/')
+                }
+            }
         } catch (err) {
-            console.log(err)
+            console.log("ERROR FOUND: ", err)
         }
     }
 

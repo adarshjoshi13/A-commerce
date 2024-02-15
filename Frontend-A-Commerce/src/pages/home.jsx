@@ -5,14 +5,10 @@ import Product from '../components/product';
 const Home = () => {
     const [productData, setProductData] = useState([]);
 
-    useState(() => {
+    useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/get-data', {
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                });
+                const response = await axios.get('http://localhost:3000/get-product-data');
 
                 if (response.data) {
                     setProductData(response.data.ProductsData);
@@ -25,7 +21,6 @@ const Home = () => {
         fetchData();
     }, [])
 
-    console.log(productData)
     const AllProducts = productData.map((value, index) => (
         <Product
             key={index}

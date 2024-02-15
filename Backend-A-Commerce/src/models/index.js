@@ -20,15 +20,17 @@ const Connection = async () => {
         await sequelize.authenticate();
         console.log('PG db connected');
 
-        sequelize.sync().catch((err) => {
-            if (err) {
+        sequelize.sync()
+            .then(() => {
+                console.log('Models synchronized');
+            })
+            .catch((err) => {
                 console.error('Error syncing models:', err);
-            }
-        });
+            });
 
     } catch (error) {
         console.error('PG database connection error:', error);
     }
 };
 
-module.exports = { Connection, GetOtps, Customers, Products, sequelize }
+module.exports = { Connection, GetOtps, Customers, Products,  sequelize }

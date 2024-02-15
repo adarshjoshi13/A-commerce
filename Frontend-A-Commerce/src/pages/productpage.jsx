@@ -1,60 +1,61 @@
-import { useParams } from 'react-router-dom'
-import Product from '../components/product'
+import { useParams } from 'react-router-dom';
+import CartShowProduct from '../components/cartShowProduct';
 import { useEffect, useState } from 'react';
+// import Loader from '../components/loader'
 import axios from 'axios';
-
 
 
 const ProductPage = () => {
 
-    const id = useParams();
+    const [productData, setProductData] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    const [productData, setProductData] = useState([]);
+    const { id } = useParams();
 
-    useState(() => {
+    useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/get-data', {
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                });
+                const response = await axios.get(`http://localhost:3000/get-product/${id}`);
 
-                if (response.data) {
-                    setProductData(response.data.ProductsData);
+                if (response.data.productData) {
+                    setProductData(response.data.productData);
                 }
+                setLoading(false);
             } catch (err) {
                 console.error("Error Found: ", err);
             }
         };
 
         fetchData();
-    }, [])
+    }, [id]);
 
-    const products = productData.map((value, index) => {
-        console.log("working")
-        if (value.id === +id.id) {
-            console.log("working")
-            return (
-                <Product
-                    key={index}
-                    id={value.id}
-                    productName={value.name}
-                    productDescription={value.description}
-                    price={value.price}
-                />
-            )
+    const Products = () => {
+        if (loading) {
+            return <p>LOADING...</p>;
         }
-    })
-    console.log({ products })
+
+        if (!productData) {
+            return <p>No product found.</p>;
+        }
+
+        return (
+            <CartShowProduct
+                key={productData.id}
+                id={productData.id}
+                productName={productData.name}
+                productDescription={productData.description}
+                price={productData.price}
+            />
+        );
+    };
 
     return (
         <>
             <div className='d-flex flex-row justify-content-evenly flex-wrap'>
-                {products}
+                <Products />
             </div>
         </>
-    )
-}
+    );
+};
 
-export default ProductPage 
+export default ProductPage;

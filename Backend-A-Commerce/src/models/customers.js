@@ -40,6 +40,11 @@ module.exports = function (sequelize, DataTypes) {
             validate: {
                 notEmpty: true
             }
+        },
+        inCart: {
+            type: DataTypes.JSON,
+            allowNull: false,
+            defaultValue: []
         }
     }, {
         sequelize,

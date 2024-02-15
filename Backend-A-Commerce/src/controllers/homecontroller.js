@@ -84,49 +84,45 @@ const Register = async (req, res) => {
 }
 
 const Login = async (req, res) => {
-
     try {
-        const Identifiers = req.body.identifier
+        let identifier = req.body.identifier;
         var isEmail = false;
 
-        for (const Identifier of Identifiers) {
-
-            function asynchronousOperation(Identifier) {
-                if (Identifier == '@') {
-
-                    isEmail = true
-                }
+        for (const char of identifier) {
+            if (char === '@') {
+                isEmail = true;
+                break;
             }
-            await asynchronousOperation(Identifier)
-
         }
 
-        const User = await Customers.findOne({
-            where: isEmail ?
-                { email: req.body.identifier } : { mobile: req.body.identifier }
-        })
+        const user = await Customers.findOne({
+            where: isEmail ? { email: identifier } : { mobile: identifier }
+        });
 
-        if (!User) {
-            res.status(500).json({ msg: "Wrong Phone Number Or Password!", success: false })
+        if (!user) {
+            return res.status(401).json({ msg: "Wrong Phone Number Or Email!", success: false });
         }
-        const userhash = User.dataValues.password
 
-        const UserIdConfirmation = await bcrypt.compare(req.body.password, userhash)
+        const userhash = user.dataValues.password;
 
-        if (UserIdConfirmation) {
-            let userIdentifier = User.dataValues.Identifiers
-            const token = await jwt.sign({ userIdentifier }, process.env.SECRET_KEY, { expiresIn: '48h' })
-            res.status(200).json({ msg: "User Login Successfully!", success: true, userToken: token })
+        const passwordMatch = await bcrypt.compare(req.body.password, userhash);
 
+        if (passwordMatch) {
+
+            const token = await jwt.sign({ identifier }, process.env.SECRET_KEY, { expiresIn: '48h' });
+            res.status(200).json({
+                msg: "User Login Successfully!",
+                success: true,
+                data: { userToken: token, userData: user.dataValues }
+            });
         } else {
-            res.status(500).json({ msg: "Wrong Password!", success: false })
+            res.status(401).json({ msg: "Wrong Password!", success: false });
         }
-
     } catch (err) {
-        res.status(500).json({ ERROR: err, success: false });
+        console.error('Error during login:', err);
+        res.status(500).json({ ERROR: err.message, success: false });
     }
-
-}
+};
 
 const GetProductData = async (req, res) => {
     console.log("ok")
@@ -139,4 +135,97 @@ const GetProductData = async (req, res) => {
     }
 }
 
-module.exports = { Authentication, Register, Login, GetProductData } 
+const GetProduct = async (req, res) => {
+
+    try {
+        let productId = req.params.id
+
+        const result = await Products.findOne({
+            where: { id: productId }
+        })
+
+        if (result) {
+            res.status(200).json({ msg: "Product Find Successfully!!", success: true, productData: result.dataValues })
+        } else {
+            res.status(500).json({ msg: "Product Find Successfully!!", success: false })
+        }
+
+    } catch (err) {
+        console.log("Error Found: ", err)
+    }
+
+}
+
+// const VerifyUser = async (req, res) => {
+
+//     let token = req.body.token
+//     var isEmail = false;
+
+//     const userIdentifier = await jwt.verify(token, process.env.SECRET_KEY);
+//     let Identifier = userIdentifier.Identifiers
+
+//     for (const Identifiers of Identifier) {
+
+//         function asynchronousOperation(Identifier) {
+//             if (Identifiers == '@') {
+
+//                 isEmail = true
+//             }
+//         }
+//         await asynchronousOperation(Identifiers)
+
+//     }
+
+//     const CustomerInfo = await Customers.findOne({
+//         where: isEmail ?
+//             { email: Identifier } : { mobile: Identifier }
+//     })
+
+//     if (CustomerInfo) {
+//         res.status(200).json({ msg: "User Verification Succesfull", success: true, data: CustomerInfo })
+//     } else {
+//         res.status(200).json({ msg: "User Verification UnSuccesfull", success: false })
+//     }
+
+
+
+
+// }
+
+const AddCart = async (req, res) => {
+    try {
+
+        console.log(req.body.productId)
+        console.log(req.body.userId.UserId)
+        try {
+            const [rowsAffected] = await Customers.update(
+                { isCart: sequelize.literal(`array_append("inCart", ${req.body.productId})`) },
+                { where: { id: req.body.userId.UserId }, returning: true, plain: true }
+              );
+              
+              // Log the SQL query
+              const sqlQuery = Customers.sequelize.query(
+                `UPDATE "${Customers.tableName}" SET "isCart" = array_append("inCart", ${req.body.productId}) WHERE "id" = ${req.body.userId.UserId} RETURNING *;`,
+                { type: sequelize.QueryTypes.UPDATE }
+              );
+              
+              console.log('SQL Query:', sqlQuery[0]);
+              
+              console.log('Rows affected:', rowsAffected);
+
+            // if (updatedCustomer) {
+            //     res.status(200).json({ msg: "Data Added In Cart Successfully", success: true })
+            // } else {
+            //     res.status(500).json({ msg: "Data Not Added In Cart", success: false })
+            // }
+        } catch (error) {
+            console.error('Error updating customer:', error);
+        }
+
+
+    } catch (err) {
+        console.log("ERROR FOUND:", err)
+    }
+
+}
+module.exports = { Authentication, Register, Login, GetProductData, GetProduct, AddCart } 
