@@ -20,6 +20,7 @@ Connection()
 app.post('/authentication', homecontroller.Authentication);
 app.post('/register', homecontroller.Register);
 app.post('/login', homecontroller.Login);
+app.get('/get-data', homecontroller.GetProductData);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);

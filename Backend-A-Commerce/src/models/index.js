@@ -31,4 +31,4 @@ const Connection = async () => {
     }
 };
 
-module.exports = { Connection, GetOtps, Customers, Products }
+module.exports = { Connection, GetOtps, Customers, Products, sequelize }

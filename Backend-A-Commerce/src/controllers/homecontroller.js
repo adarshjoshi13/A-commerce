@@ -1,8 +1,8 @@
 const nodemailer = require('nodemailer');
-const { GetOtps, Customers } = require('../models/index')
+const { GetOtps, Customers, Products } = require('../models/index')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { Sequelize } = require('sequelize');
+const { sequelize } = require('../models/index');
 require('dotenv').config();
 
 
@@ -128,4 +128,15 @@ const Login = async (req, res) => {
 
 }
 
-module.exports = { Authentication, Register, Login } 
+const GetProductData = async (req, res) => {
+    console.log("ok")
+    const [results, metadata] = await sequelize.query('SELECT * FROM products')
+
+    if (results) {
+        res.status(200).json({ msg: "Successfull To Get Data!!", status: false, ProductsData: results })
+    } else {
+        res.status(500).json({ msg: "Unsuccessfull To Get Data!!", status: false })
+    }
+}
+
+module.exports = { Authentication, Register, Login, GetProductData } 

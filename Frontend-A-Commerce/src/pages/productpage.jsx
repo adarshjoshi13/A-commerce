@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom'
-import Data from '../Data'
 import Product from '../components/product'
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 
 
@@ -8,14 +9,38 @@ const ProductPage = () => {
 
     const id = useParams();
 
-    const products = Data.map((value, index) => {
-        if (value.productId === +id.id) {
+    const [productData, setProductData] = useState([]);
+
+    useState(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/get-data', {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (response.data) {
+                    setProductData(response.data.ProductsData);
+                }
+            } catch (err) {
+                console.error("Error Found: ", err);
+            }
+        };
+
+        fetchData();
+    }, [])
+
+    const products = productData.map((value, index) => {
+        console.log("working")
+        if (value.id === +id.id) {
+            console.log("working")
             return (
                 <Product
                     key={index}
-                    id={value.productId}
-                    productName={value.productName}
-                    productDescription={value.productDescription}
+                    id={value.id}
+                    productName={value.name}
+                    productDescription={value.description}
                     price={value.price}
                 />
             )
