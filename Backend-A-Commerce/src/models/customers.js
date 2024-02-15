@@ -42,8 +42,8 @@ module.exports = function (sequelize, DataTypes) {
             }
         },
         inCart: {
-            type: DataTypes.JSON,
-            allowNull: false,
+            type: DataTypes.ARRAY(DataTypes.INTEGER),
+            allowNull: true,
             defaultValue: []
         }
     }, {

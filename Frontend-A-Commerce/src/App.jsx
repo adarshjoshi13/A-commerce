@@ -1,10 +1,10 @@
 import Navbar from './components/navbar'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Home from './pages/home'
+import Home from './pages/homePage'
 import ProductPage from './pages/productpage'
 import SignUpPage from './pages/signUpPage'
 import LoginPage from './pages/loginPage'
-import CartPage from './pages/CartPage'
+import CartPage from './pages/cartPage'
 
 function App() {
   return (

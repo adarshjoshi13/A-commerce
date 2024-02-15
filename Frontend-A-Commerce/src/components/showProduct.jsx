@@ -14,8 +14,8 @@ export default function CartShowProduct(props) {
                 'Content-Type': 'application/json'
             }
         })
-        console.log(UpdateUserCart)
-        if(UpdateUserCart) {
+
+        if (UpdateUserCart) {
             console.log("added to cart successfully")
         }
     }
@@ -29,8 +29,8 @@ export default function CartShowProduct(props) {
                 <p>{props.price}</p>
 
                 <div className="d-flex justify-content-between ">
-                <Link to={`/product-page/${props.id}`}><button type="btn" className="btn-primary btn">Purchase</button></Link>
-                <button type="btn" className="btn-primary btn" onClick={() => { AddCart(props.id) }}>Add To cart</button>
+                    <Link to={`/product-page/${props.id}`}><button type="btn" className="btn-primary btn">Purchase</button></Link>
+                    <button type="btn" className="btn-primary btn" onClick={() => { AddCart(props.id) }}>Add To cart</button>
                 </div>
             </div>
         </>

@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import CartShowProduct from '../components/cartShowProduct';
+import CartShowProduct from '../components/showProduct';
 import { useEffect, useState } from 'react';
 // import Loader from '../components/loader'
 import axios from 'axios';

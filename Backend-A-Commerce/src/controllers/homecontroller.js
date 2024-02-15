@@ -125,7 +125,6 @@ const Login = async (req, res) => {
 };
 
 const GetProductData = async (req, res) => {
-    console.log("ok")
     const [results, metadata] = await sequelize.query('SELECT * FROM products')
 
     if (results) {
@@ -198,26 +197,25 @@ const AddCart = async (req, res) => {
         console.log(req.body.productId)
         console.log(req.body.userId.UserId)
         try {
-            const [rowsAffected] = await Customers.update(
-                { isCart: sequelize.literal(`array_append("inCart", ${req.body.productId})`) },
-                { where: { id: req.body.userId.UserId }, returning: true, plain: true }
-              );
-              
-              // Log the SQL query
-              const sqlQuery = Customers.sequelize.query(
-                `UPDATE "${Customers.tableName}" SET "isCart" = array_append("inCart", ${req.body.productId}) WHERE "id" = ${req.body.userId.UserId} RETURNING *;`,
-                { type: sequelize.QueryTypes.UPDATE }
-              );
-              
-              console.log('SQL Query:', sqlQuery[0]);
-              
-              console.log('Rows affected:', rowsAffected);
 
-            // if (updatedCustomer) {
-            //     res.status(200).json({ msg: "Data Added In Cart Successfully", success: true })
-            // } else {
-            //     res.status(500).json({ msg: "Data Not Added In Cart", success: false })
-            // }
+            const updatedData = await Customers.update(
+                {
+                    inCart: sequelize.literal(`array_append("inCart", ${req.body.productId})`),
+                },
+                {
+                    where: { id: req.body.userId.UserId },
+                    returning: true, // to get the updated record
+                    plain: true, // to get only the updated data
+                    raw: true, // to get the raw result
+                    // Set additional options based on your requirements
+                }
+            );
+
+            if (updatedData) {
+                res.status(200).json({ msg: "Data Added In Cart Successfully", success: true })
+            } else {
+                res.status(500).json({ msg: "Data Not Added In Cart", success: false })
+            }
         } catch (error) {
             console.error('Error updating customer:', error);
         }
@@ -228,4 +226,32 @@ const AddCart = async (req, res) => {
     }
 
 }
-module.exports = { Authentication, Register, Login, GetProductData, GetProduct, AddCart } 
+
+const GetUserProduct = async (req, res) => {
+
+    try {
+        const userId = req.params.userId
+
+        const userInfo = await Customers.findOne({
+            where: { id: userId }
+        })
+
+        const userCartProducts = userInfo.dataValues.inCart
+
+        const CartShowProducts = await Products.findAll({
+            where: { id: userCartProducts }
+        })
+
+        if (CartShowProducts) {
+            res.status(200).json({ msg: "User Selected Product retrieve successfully", success: true, data: CartShowProducts })
+        } else {
+            res.status(500).json({ msg: "Didn't get user selected products", success: false })
+        }
+    } catch (err) {
+        console.log("ERROR FOUND: ", err)
+        res.status(500).json({ msg: "Error Found", success: false })
+    }
+
+}
+
+module.exports = { Authentication, Register, Login, GetProductData, GetProduct, AddCart, GetUserProduct } 
