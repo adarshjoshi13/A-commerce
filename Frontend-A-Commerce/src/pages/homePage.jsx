@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Product from '../components/product';
 
-const Home = () => {
+const HomePage = () => {
     const [productData, setProductData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -12,6 +13,7 @@ const Home = () => {
 
                 if (response.data) {
                     setProductData(response.data.ProductsData);
+                    setLoading(false);
                 }
             } catch (err) {
                 console.error("Error Found: ", err);
@@ -34,10 +36,10 @@ const Home = () => {
     return (
         <>
             <div className='d-flex flex-row justify-content-evenly flex-wrap'>
-                {AllProducts}
+                {loading? <p>loading...</p>: AllProducts}
             </div>
         </>
     );
 };
 
-export default Home;
+export default HomePage;

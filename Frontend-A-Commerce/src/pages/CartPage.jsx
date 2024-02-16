@@ -1,7 +1,6 @@
 import axios from "axios"
 import { useState } from "react"
 import { useEffect } from "react"
-import { Link } from "react-router-dom"
 import CartProduct from "../components/cartProduct"
 import Cookies from "js-cookie"
 export default function CartProducts() {
@@ -9,24 +8,28 @@ export default function CartProducts() {
     const [userCartSelectedProducts, setUserCartSelectedProducts] = useState([])
     const [loader, setLoader] = useState(false)
     let userId = Cookies.get('userId')
-    console.log(userId)
+
     useEffect(() => {
+        if (userId) {
+            const GetUserCartData = async () => {
+                try {
+                    const response = await axios.get(`http://localhost:3000/get-user-cart/${userId}`);
 
-        const GetUserCartData = async () => {
-            try {
-                const response = await axios.get(`http://localhost:3000/get-user-product/${userId}`);
-
-                if (response && response.data) {
-                    setUserCartSelectedProducts(response.data.data);
-                    setLoader(true);
+                    if (response && response.data) {
+                        setUserCartSelectedProducts(response.data.data);
+                        setLoader(true);
+                    }
+                } catch (error) {
+                    console.error('Error fetching user cart data:', error);
                 }
-            } catch (error) {
-                console.error('Error fetching user cart data:', error);
+
             }
 
+            GetUserCartData()
+        } else {
+            setLoader(true);
         }
 
-        GetUserCartData()
     }, [])
 
     console.log(userCartSelectedProducts)
@@ -42,7 +45,12 @@ export default function CartProducts() {
                     price={value.price}
                 />
             )
-            )) : (<p>You Cart Is Empty.</p>)
+            )) : (
+            <>
+                <h3 className="text-center fw-bold my-4">YOUR CART IS EMPTY</h3>
+                {userId? null: <h4 className="fw-bold text-center">Please Sign In To Fill</h4>}
+            </>
+        )
 
 
     return (

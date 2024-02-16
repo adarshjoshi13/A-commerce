@@ -45,6 +45,11 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.ARRAY(DataTypes.INTEGER),
             allowNull: true,
             defaultValue: []
+        },
+        inWishlist: {
+            type: DataTypes.ARRAY(DataTypes.INTEGER),
+            allowNull: true,
+            defaultValue: []
         }
     }, {
         sequelize,

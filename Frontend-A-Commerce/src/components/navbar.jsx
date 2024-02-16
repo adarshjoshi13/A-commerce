@@ -1,11 +1,13 @@
-import { Link, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import { Link } from 'react-router-dom';
 
 export default function Navbar() {
-    const Navigate = useNavigate()
     const storedToken = localStorage.getItem('token');
     const handleLogout = () => {
+        console.log("meow")
+        Cookies.remove('userId');
         localStorage.clear();
-        Navigate('/')
+        window.location.replace('/');
     }
 
     return (
@@ -22,17 +24,24 @@ export default function Navbar() {
                         </ul>
 
                         <div className='mx-3 d-flex justify-content-center align-items-center flex-nowrap'>
-                            <li className='list-unstyled'>
+
+                            <li className='list-unstyled mx-2'>
                                 <Link to="/my-cart" ><i className="bi bi-cart-fill text-black fs-4"></i></Link>
                             </li>
+
+                            {storedToken ?
+                                <li className='list-unstyled mx-2 '>
+                                    <Link to="/my-wishlist"><i className="bi bi-heart-fill text-black fs-4"></i></Link>
+                                </li>
+                                :
+                                null}
+
                         </div>
 
                         {storedToken ?
-                            <li className="nav-item  list-unstyled mx-2" onClick={handleLogout}>
-                                <Link to="/my-cart" className="nav-link fw-bold" aria-expanded="false">
-                                    Log Out
-                                </Link>
-                            </li> :
+
+                            <h5 role="button" onClick={handleLogout} className='fw-bold m-0 p-0 cursor-pointer'> Log Out</h5>
+                            :
                             <li className="nav-item dropdown list-unstyled mx-2">
 
                                 <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

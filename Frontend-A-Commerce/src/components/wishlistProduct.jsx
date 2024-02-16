@@ -2,7 +2,7 @@ import axios from "axios"
 import { Link } from "react-router-dom"
 import Cookies from "js-cookie"
 
-export default function CartProduct(props) {
+export default function WishlistProduct(props) {
     const userId = Cookies.get('userId')
 
     const DelteFromCart = async (ProductId) => {

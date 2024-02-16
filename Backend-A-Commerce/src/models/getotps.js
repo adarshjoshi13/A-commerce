@@ -28,6 +28,15 @@ module.exports = function (sequelize, DataTypes) {
         is_verify: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            defaultValue: 0,
+            validate: {
+                notEmpty: true
+            }
+        },
+        of_user: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
             validate: {
                 notEmpty: true
             }

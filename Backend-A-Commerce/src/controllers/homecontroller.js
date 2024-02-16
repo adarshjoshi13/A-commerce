@@ -11,8 +11,7 @@ const Authentication = async (req, res) => {
 
     GetOtps.create({
         mobile: req.body.number,
-        generate_otp: OTP,
-        is_verify: 0
+        generate_otp: OTP
     })
 
     let Transporter = nodemailer.createTransport({
@@ -64,6 +63,23 @@ const Register = async (req, res) => {
             })
 
             if (RegisterCustomer) {
+
+                const User = await Customers.findOne({
+                    where: { mobile: req.body.number }
+                })
+
+                console.log(User.dataValues.id)
+
+                const UpdateOfUser = await GetOtps.update(
+                    { of_user: User.dataValues.id },
+                    { where: { generate_otp: req.body.OTP } }
+                )
+
+                if (UpdateOfUser) {
+                    console.log("successfully updated")
+                }
+
+
                 res.status(200).json({ msg: "User Added Successfully", success: true, name: req.body.name })
 
             } else {
@@ -85,6 +101,7 @@ const Register = async (req, res) => {
 
 const Login = async (req, res) => {
     try {
+
         let identifier = req.body.identifier;
         var isEmail = false;
 
@@ -94,6 +111,19 @@ const Login = async (req, res) => {
                 break;
             }
         }
+
+        // if (!isEmail) {
+        //     console.log("run")
+        //     const UpdateUserInGetOtp = async () => {
+        //     console.log("run2")
+        //         await GetOtps.update(
+        //             { of_user: req.body.userId },
+        //             { where: { mobile: identifier } }
+        //         );
+        //     };
+
+        //     await UpdateUserInGetOtp();
+        // }
 
         const user = await Customers.findOne({
             where: isEmail ? { email: identifier } : { mobile: identifier }
@@ -123,6 +153,23 @@ const Login = async (req, res) => {
         res.status(500).json({ ERROR: err.message, success: false });
     }
 };
+
+const GetUserData = async (req, res) => {
+    try {
+        let userId = req.params.userId
+
+        const getUserData = await Customers.find({
+            where: {id:userId }
+        })
+
+        if(getUserData) {
+            console.log(getUserData)
+        }
+    } catch (Err) {
+        console.log("Error while getting user data")
+        res.status(500).json({ msg: "Error while getting user data" })
+    }
+}
 
 const GetProductData = async (req, res) => {
     const [results, metadata] = await sequelize.query('SELECT * FROM products')
@@ -192,40 +239,30 @@ const GetProduct = async (req, res) => {
 // }
 
 const AddCart = async (req, res) => {
+
     try {
 
-        try {
-
-            const updatedData = await Customers.update(
-                {
-                    inCart: sequelize.literal(`array_append("inCart", ${req.body.productId})`),
-                },
-                {
-                    where: { id: req.body.userId },
-                    returning: true, // to get the updated record
-                    plain: true, // to get only the updated data
-                    raw: true, // to get the raw result
-                    // Set additional options based on your requirements
-                }
-            );
-
-            if (updatedData) {
-                res.status(200).json({ msg: "Data Added In Cart Successfully", success: true })
-            } else {
-                res.status(500).json({ msg: "Data Not Added In Cart", success: false })
+        const updateUserData = await Customers.update(
+            {
+                inCart: sequelize.literal(`array_append("inCart", ${req.body.productId})`),
+            },
+            {
+                where: { id: req.body.userId }
             }
-        } catch (error) {
-            console.error('Error updating customer:', error);
+        );
+
+        if (updateUserData) {
+            res.status(200).json({ msg: "Data Added In Cart Successfully", success: true })
+        } else {
+            res.status(500).json({ msg: "Data Not Added In Cart", success: false })
         }
-
-
-    } catch (err) {
-        console.log("ERROR FOUND:", err)
+    } catch (error) {
+        console.error('Error updating customer cart:', error);
     }
 
 }
 
-const GetUserProduct = async (req, res) => {
+const GetUserCart = async (req, res) => {
 
     try {
         const userId = req.params.userId
@@ -253,4 +290,78 @@ const GetUserProduct = async (req, res) => {
 
 }
 
-module.exports = { Authentication, Register, Login, GetProductData, GetProduct, AddCart, GetUserProduct } 
+const RemoveFromCart = async (req, res) => {
+    try {
+        console.log("run")
+        console.log(req.body)
+        let ProductId = req.body.productId
+        let UserId = req.body.userId
+
+        const updatedCustomer = await Customers.update(
+            { inCart: sequelize.literal(`array_remove("inCart", ${ProductId})`) },
+            { where: { id: UserId } }
+        );
+
+        if (updatedCustomer) {
+            res.status(200).json({ msg: "Product Remove From Cart Successfully", success: true })
+        } else {
+            res.status(500).json({ msg: "Product Not Removed From Cart", success: false })
+        }
+    } catch (Err) {
+        console.log("ERROR FOUND: ", Err)
+        res.status(500).json({ msg: "Erro Found While Removing From Cart", success: false })
+    }
+
+}
+
+const AddWishlist = async (req, res) => {
+    try {
+
+        const updateUserData = await Customers.update(
+            {
+                inWishlist: sequelize.literal(`array_append("inWishlist", ${req.body.productId})`),
+            },
+            {
+                where: { id: req.body.userId }
+            }
+        );
+
+        if (updateUserData) {
+            res.status(200).json({ msg: "Data Added In Wishlist Successfully", success: true })
+        } else {
+            res.status(500).json({ msg: "Data Not Added In Wishlist", success: false })
+        }
+    } catch (error) {
+        console.error('Error updating customer wishlist:', error);
+    }
+
+}
+
+const GetUserWishlist = async (req, res) => {
+
+    try {
+        const userId = req.params.userId
+
+        const userInfo = await Customers.findOne({
+            where: { id: userId }
+        })
+
+        const userWishlistProducts = userInfo.dataValues.inWishlist
+
+        const WishlistShowProducts = await Products.findAll({
+            where: { id: userWishlistProducts }
+        })
+
+
+        if (WishlistShowProducts) {
+            res.status(200).json({ msg: "User Wishlist Product retrieve successfully", success: true, data: WishlistShowProducts })
+        } else {
+            res.status(500).json({ msg: "Didn't get user wishlist products", success: false })
+        }
+    } catch (err) {
+        console.log("ERROR FOUND: ", err)
+        res.status(500).json({ msg: "Error Found", success: false })
+    }
+}
+
+module.exports = { Authentication, Register, Login, GetUserData, GetProductData, GetProduct, AddCart, GetUserCart, RemoveFromCart, AddWishlist, GetUserWishlist } 
