@@ -3,22 +3,21 @@ import { Link } from "react-router-dom"
 import Cookies from "js-cookie"
 
 export default function WishlistProduct(props) {
-    const userId = Cookies.get('userId')
 
-    const DelteFromCart = async (ProductId) => {
+    const [userId, setUserId] = useState(Cookies.get('userId'));
+
+    const RemoveFromWishlist = async (ProductId) => {
         let productId = ProductId
         try {
-            console.log("run")
-            const DeletedProduct = await axios.post('http://localhost:3000/remove-from-cart', { userId, productId }, {
+            const RemoveWishlist = await axios.post('http://localhost:3000/remove-from-wishlist', { userId, productId }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
 
-            if (DeletedProduct) {
-                console.log(DeletedProduct)
-                console.log("deleted successfully")
-                window.location.reload()
+            if (RemoveWishlist) {
+                console.log("removed successfully from wishlish")
+                props.refresh()
             }
         } catch (ERR) {
             console.log("ERROR FOUND: ", ERR)
@@ -38,7 +37,7 @@ export default function WishlistProduct(props) {
                 <h3>{props.price}</h3>
 
                 <div className="d-flex justify-content-between ">
-                    <button type="btn" className="btn-primary btn" onClick={() => { DelteFromCart(props.id) }} >Delete</button>
+                    <button type="btn" className="btn-primary btn" onClick={() => { RemoveFromWishlist(props.id) }} >Delete</button>
                 </div>
             </div>
 

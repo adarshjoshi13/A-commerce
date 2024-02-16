@@ -8,32 +8,36 @@ export default function WishlistPage() {
 
     const [userWishlistProducts, setUserWishlistProducts] = useState([])
     const [loader, setLoader] = useState(false)
-    let userId = Cookies.get('userId')
+    const [userId, setUserId] = useState(Cookies.get('userId'))
+
+    const GetUserWishlistData = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3000/get-user-wishlist/${userId}`);
+
+            if (response && response.data) {
+                setUserWishlistProducts(response.data.data);
+                setLoader(true);
+            }
+        } catch (error) {
+            console.error('Error fetching user cart data:', error);
+            setLoader(true);
+        }
+
+    }
+
 
     useEffect(() => {
         if (userId) {
-            const GetUserWishlistData = async () => {
-                try {
-                    const response = await axios.get(`http://localhost:3000/get-user-wishlist/${userId}`);
-
-                    if (response && response.data) {
-                        setUserWishlistProducts(response.data.data);
-                        setLoader(true);
-                    }
-                } catch (error) {
-                    console.error('Error fetching user cart data:', error);
-                    setLoader(true);
-                }
-
-            }
-
             GetUserWishlistData()
         } else {
             setLoader(true);
         }
 
-    }, [])
+    }, [userId])
 
+    const refreshPage = () => {
+        GetUserWishlistData()
+    }
 
     const WishlistProducts =
         userWishlistProducts.length > 0 ? (
@@ -44,6 +48,7 @@ export default function WishlistPage() {
                     productName={value.name}
                     productDescription={value.description}
                     price={value.price}
+                    refresh={refreshPage}
                 />
             )
             )) : (

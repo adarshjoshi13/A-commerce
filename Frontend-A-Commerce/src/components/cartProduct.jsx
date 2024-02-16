@@ -5,20 +5,17 @@ import Cookies from "js-cookie"
 export default function CartProduct(props) {
     const userId = Cookies.get('userId')
 
-    const DelteFromCart = async (ProductId) => {
+    const RemoveFromCart = async (ProductId) => {
         let productId = ProductId
         try {
-            console.log("run")
-            const DeletedProduct = await axios.post('http://localhost:3000/remove-from-cart', { userId, productId }, {
+            const RemoveProduct = await axios.post('http://localhost:3000/remove-from-cart', { userId, productId }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
 
-            if (DeletedProduct) {
-                console.log(DeletedProduct)
-                console.log("deleted successfully")
-                window.location.reload()
+            if (RemoveProduct) {
+                props.refresh()
             }
         } catch (ERR) {
             console.log("ERROR FOUND: ", ERR)
@@ -38,7 +35,7 @@ export default function CartProduct(props) {
                 <h3>{props.price}</h3>
 
                 <div className="d-flex justify-content-between ">
-                    <button type="btn" className="btn-primary btn" onClick={() => { DelteFromCart(props.id) }} >Delete</button>
+                    <button type="btn" className="btn-primary btn" onClick={() => { RemoveFromCart(props.id) }} >Delete</button>
                 </div>
             </div>
 
