@@ -1,6 +1,7 @@
 var express = require('express');
 const cors = require('cors');
 const homecontroller = require('./src/controllers/homecontroller');
+const usercontroller = require('./src/controllers/usercontroller');
 const { Connection } = require('./src/models/index')
 require('dotenv').config();
 
@@ -17,14 +18,20 @@ app.use(cors({
 
 Connection()
 
-app.post('/authentication', homecontroller.Authentication);
-app.post('/register', homecontroller.Register);
-app.post('/login', homecontroller.Login);
+app.post('/authentication', usercontroller.Authentication);
+app.post('/register', usercontroller.Register);
+app.post('/login', usercontroller.Login);
+app.get('/get-user-data/:userId', usercontroller.GetUserData);
+// app.post('/verify-user', usercontroller.VerifyUser);
 app.get('/get-product-data', homecontroller.GetProductData);
 app.get('/get-product/:id', homecontroller.GetProduct);
-// app.post('/verify-user', homecontroller.VerifyUser);
 app.post('/add-cart', homecontroller.AddCart);
-app.get('/get-user-product/:userId', homecontroller.GetUserProduct);
+app.get('/get-user-cart/:userId', homecontroller.GetUserCart);
+app.post('/remove-from-cart', homecontroller.RemoveFromCart);
+app.post('/add-wishlist', homecontroller.AddWishlist);
+app.get('/get-user-wishlist/:userId', homecontroller.GetUserWishlist);
+app.post('/remove-from-wishlist', homecontroller.RemoveFromWishlist);
+
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);

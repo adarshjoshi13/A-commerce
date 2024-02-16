@@ -1,10 +1,9 @@
 import axios from "axios"
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
 import Cookies from "js-cookie"
 
 export default function Login() {
-    const Navigate = useNavigate()
+
 
     const [FormData, setFormData] = useState({
         identifier: "",
@@ -34,7 +33,7 @@ export default function Login() {
                 let token = response.data.data.userToken
                 localStorage.setItem('token', token);
                 Cookies.set('userId', userId, { secure: true, expires: 7, sameSite: 'Strict' });
-                Navigate('/')
+                window.location.replace('/');
 
             }
         } catch (err) {
