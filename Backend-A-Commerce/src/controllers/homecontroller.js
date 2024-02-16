@@ -1,8 +1,8 @@
 const nodemailer = require('nodemailer');
-const { GetOtps, Customers } = require('../models/index')
+const { GetOtps, Customers, Products } = require('../models/index')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { Sequelize } = require('sequelize');
+const { sequelize } = require('../models/index');
 require('dotenv').config();
 
 
@@ -84,48 +84,173 @@ const Register = async (req, res) => {
 }
 
 const Login = async (req, res) => {
-
     try {
-        const Identifiers = req.body.identifier
+        let identifier = req.body.identifier;
         var isEmail = false;
 
-        for (const Identifier of Identifiers) {
-
-            function asynchronousOperation(Identifier) {
-                if (Identifier == '@') {
-
-                    isEmail = true
-                }
+        for (const char of identifier) {
+            if (char === '@') {
+                isEmail = true;
+                break;
             }
-            await asynchronousOperation(Identifier)
-
         }
 
-        const User = await Customers.findOne({
-            where: isEmail ?
-                { email: req.body.identifier } : { mobile: req.body.identifier }
+        const user = await Customers.findOne({
+            where: isEmail ? { email: identifier } : { mobile: identifier }
+        });
+
+        if (!user) {
+            return res.status(401).json({ msg: "Wrong Phone Number Or Email!", success: false });
+        }
+
+        const userhash = user.dataValues.password;
+
+        const passwordMatch = await bcrypt.compare(req.body.password, userhash);
+
+        if (passwordMatch) {
+
+            const token = await jwt.sign({ identifier }, process.env.SECRET_KEY, { expiresIn: '48h' });
+            res.status(200).json({
+                msg: "User Login Successfully!",
+                success: true,
+                data: { userToken: token, userData: user.dataValues }
+            });
+        } else {
+            res.status(401).json({ msg: "Wrong Password!", success: false });
+        }
+    } catch (err) {
+        console.error('Error during login:', err);
+        res.status(500).json({ ERROR: err.message, success: false });
+    }
+};
+
+const GetProductData = async (req, res) => {
+    const [results, metadata] = await sequelize.query('SELECT * FROM products')
+
+    if (results) {
+        res.status(200).json({ msg: "Successfull To Get Data!!", status: false, ProductsData: results })
+    } else {
+        res.status(500).json({ msg: "Unsuccessfull To Get Data!!", status: false })
+    }
+}
+
+const GetProduct = async (req, res) => {
+
+    try {
+        let productId = req.params.id
+
+        const result = await Products.findOne({
+            where: { id: productId }
         })
 
-        if (!User) {
-            res.status(500).json({ msg: "Wrong Phone Number Or Password!", success: false })
-        }
-        const userhash = User.dataValues.password
-
-        const UserIdConfirmation = await bcrypt.compare(req.body.password, userhash)
-
-        if (UserIdConfirmation) {
-            let userIdentifier = User.dataValues.Identifiers
-            const token = await jwt.sign({ userIdentifier }, process.env.SECRET_KEY, { expiresIn: '48h' })
-            res.status(200).json({ msg: "User Login Successfully!", success: true, userToken: token })
-
+        if (result) {
+            res.status(200).json({ msg: "Product Find Successfully!!", success: true, productData: result.dataValues })
         } else {
-            res.status(500).json({ msg: "Wrong Password!", success: false })
+            res.status(500).json({ msg: "Product Find Successfully!!", success: false })
         }
 
     } catch (err) {
-        res.status(500).json({ ERROR: err, success: false });
+        console.log("Error Found: ", err)
     }
 
 }
 
-module.exports = { Authentication, Register, Login } 
+// const VerifyUser = async (req, res) => {
+
+//     let token = req.body.token
+//     var isEmail = false;
+
+//     const userIdentifier = await jwt.verify(token, process.env.SECRET_KEY);
+//     let Identifier = userIdentifier.Identifiers
+
+//     for (const Identifiers of Identifier) {
+
+//         function asynchronousOperation(Identifier) {
+//             if (Identifiers == '@') {
+
+//                 isEmail = true
+//             }
+//         }
+//         await asynchronousOperation(Identifiers)
+
+//     }
+
+//     const CustomerInfo = await Customers.findOne({
+//         where: isEmail ?
+//             { email: Identifier } : { mobile: Identifier }
+//     })
+
+//     if (CustomerInfo) {
+//         res.status(200).json({ msg: "User Verification Succesfull", success: true, data: CustomerInfo })
+//     } else {
+//         res.status(200).json({ msg: "User Verification UnSuccesfull", success: false })
+//     }
+
+
+
+
+// }
+
+const AddCart = async (req, res) => {
+    try {
+
+        try {
+
+            const updatedData = await Customers.update(
+                {
+                    inCart: sequelize.literal(`array_append("inCart", ${req.body.productId})`),
+                },
+                {
+                    where: { id: req.body.userId },
+                    returning: true, // to get the updated record
+                    plain: true, // to get only the updated data
+                    raw: true, // to get the raw result
+                    // Set additional options based on your requirements
+                }
+            );
+
+            if (updatedData) {
+                res.status(200).json({ msg: "Data Added In Cart Successfully", success: true })
+            } else {
+                res.status(500).json({ msg: "Data Not Added In Cart", success: false })
+            }
+        } catch (error) {
+            console.error('Error updating customer:', error);
+        }
+
+
+    } catch (err) {
+        console.log("ERROR FOUND:", err)
+    }
+
+}
+
+const GetUserProduct = async (req, res) => {
+
+    try {
+        const userId = req.params.userId
+
+        const userInfo = await Customers.findOne({
+            where: { id: userId }
+        })
+
+        const userCartProducts = userInfo.dataValues.inCart
+        console.log(userCartProducts)
+        const CartShowProducts = await Products.findAll({
+            where: { id: userCartProducts }
+        })
+
+        console.log(CartShowProducts)
+        if (CartShowProducts) {
+            res.status(200).json({ msg: "User Selected Product retrieve successfully", success: true, data: CartShowProducts })
+        } else {
+            res.status(500).json({ msg: "Didn't get user selected products", success: false })
+        }
+    } catch (err) {
+        console.log("ERROR FOUND: ", err)
+        res.status(500).json({ msg: "Error Found", success: false })
+    }
+
+}
+
+module.exports = { Authentication, Register, Login, GetProductData, GetProduct, AddCart, GetUserProduct } 

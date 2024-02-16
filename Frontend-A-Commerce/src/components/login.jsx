@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import Cookies from "js-cookie"
 
 export default function Login() {
     const Navigate = useNavigate()
@@ -28,10 +29,16 @@ export default function Login() {
                 },
                 withCredentials: true,
             })
-            localStorage.setItem('token', response.data.userToken)
-            Navigate('/')
+            if (response) {
+                let userId = response.data.data.userData.id
+                let token = response.data.data.userToken
+                localStorage.setItem('token', token);
+                Cookies.set('userId', userId, { secure: true, expires: 7, sameSite: 'Strict' });
+                Navigate('/')
+
+            }
         } catch (err) {
-            console.log(err)
+            console.log("ERROR FOUND: ", err)
         }
     }
 

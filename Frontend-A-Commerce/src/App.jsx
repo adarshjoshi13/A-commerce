@@ -1,9 +1,10 @@
 import Navbar from './components/navbar'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Home from './pages/home'
-import ProductPage from './pages/productPage'
+import Home from './pages/homePage'
+import ProductPage from './pages/productpage'
 import SignUpPage from './pages/signUpPage'
 import LoginPage from './pages/loginPage'
+import CartPage from './pages/cartPage'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path='/product-page/:id' element={<ProductPage />} />
           <Route path='/signup' element={<SignUpPage />} />
           <Route path='/login' element={<LoginPage />} />
+          <Route path='/my-cart' element={<CartPage />} />
         </Routes>
       </Router>
     </>
