@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import CartShowProduct from '../components/showProduct';
+import ShowProduct from '../components/showProduct';
 import { useEffect, useState } from 'react';
 // import Loader from '../components/loader'
 import axios from 'axios';
@@ -39,7 +39,7 @@ const ProductPage = () => {
         }
 
         return (
-            <CartShowProduct
+            <ShowProduct
                 key={productData.id}
                 id={productData.id}
                 productName={productData.name}

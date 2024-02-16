@@ -194,8 +194,6 @@ const GetProduct = async (req, res) => {
 const AddCart = async (req, res) => {
     try {
 
-        console.log(req.body.productId)
-        console.log(req.body.userId.UserId)
         try {
 
             const updatedData = await Customers.update(
@@ -203,7 +201,7 @@ const AddCart = async (req, res) => {
                     inCart: sequelize.literal(`array_append("inCart", ${req.body.productId})`),
                 },
                 {
-                    where: { id: req.body.userId.UserId },
+                    where: { id: req.body.userId },
                     returning: true, // to get the updated record
                     plain: true, // to get only the updated data
                     raw: true, // to get the raw result
@@ -237,11 +235,12 @@ const GetUserProduct = async (req, res) => {
         })
 
         const userCartProducts = userInfo.dataValues.inCart
-
+        console.log(userCartProducts)
         const CartShowProducts = await Products.findAll({
             where: { id: userCartProducts }
         })
 
+        console.log(CartShowProducts)
         if (CartShowProducts) {
             res.status(200).json({ msg: "User Selected Product retrieve successfully", success: true, data: CartShowProducts })
         } else {

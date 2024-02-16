@@ -1,10 +1,9 @@
 import axios from "axios"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useAuth } from "../utilis/Auth"
+import Cookies from "js-cookie"
 
 export default function Login() {
-    const { UserVerification } = useAuth()
     const Navigate = useNavigate()
 
     const [FormData, setFormData] = useState({
@@ -33,11 +32,10 @@ export default function Login() {
             if (response) {
                 let userId = response.data.data.userData.id
                 let token = response.data.data.userToken
-                const VerifiedUserId = await UserVerification(userId)
-                if(VerifiedUserId){
-                    localStorage.setItem('token', token)
-                    Navigate('/')
-                }
+                localStorage.setItem('token', token);
+                Cookies.set('userId', userId, { secure: true, expires: 7, sameSite: 'Strict' });
+                Navigate('/')
+
             }
         } catch (err) {
             console.log("ERROR FOUND: ", err)

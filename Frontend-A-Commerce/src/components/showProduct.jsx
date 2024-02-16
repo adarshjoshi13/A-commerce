@@ -1,14 +1,17 @@
 import { Link } from "react-router-dom"
-import { useAuth } from "../utilis/Auth"
 import axios from "axios"
+import Cookies from "js-cookie"
 
-export default function CartShowProduct(props) {
+export default function ShowProduct(props) {
 
-    const userId = useAuth()
+    const userId = Cookies.get('userId')
     console.log(userId)
 
     const AddCart = async (id) => {
         let productId = id
+        console.log(productId)
+        console.log(userId)
+
         const UpdateUserCart = await axios.post('http://localhost:3000/add-cart', { productId, userId }, {
             headers: {
                 'Content-Type': 'application/json'
