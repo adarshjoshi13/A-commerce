@@ -1,22 +1,27 @@
 
-const { Customers, Products, Categories } = require('../models/index')
+const { Customers, Products, Categories, PurchaseSteps } = require('../models/index')
 const { sequelize } = require('../models/index');
 require('dotenv').config();
 
 
 const GetProductData = async (req, res) => {
 
-    let CategoryId = req.params.catId
+    try {
+        let CategoryId = req.params.catId
 
-    const AllProducts = await Products.findAll({
-        where: { catId: CategoryId }
-    })
+        const AllProducts = await Products.findAll({
+            where: { catId: CategoryId }
+        })
 
 
-    if (AllProducts) {
-        res.status(200).json({ msg: "Successfull To Get Data!!", status: false, ProductsData: AllProducts })
-    } else {
-        res.status(500).json({ msg: "Unsuccessfull To Get Data!!", status: false })
+        if (AllProducts) {
+            res.status(200).json({ msg: "Successfull To Find All Products Data!!", status: false, ProductsData: AllProducts })
+        } else {
+            res.status(500).json({ msg: "Fail To Find All Products Data!!", status: false })
+        }
+    } catch (Err) {
+        console.log("Error Found Whille Find All Products Data", err)
+        res.status(500).json({ msg: "Fail To Find All Products Data!!", status: false })
     }
 }
 
@@ -35,9 +40,9 @@ const GetProduct = async (req, res) => {
             res.status(500).json({ msg: "Product Not Found!!", success: false })
         }
 
-    } catch (err) {
-        console.log("Error Found Whille Getting Product", err)
-        res.status(500).json({ msg: "Fail To Get!!", success: false })
+    } catch (Err) {
+        console.log("Error Found While Finding Product", Err)
+        res.status(500).json({ msg: "Fail To Find Product!!", success: false })
     }
 
 }
@@ -47,21 +52,18 @@ const AddCart = async (req, res) => {
     try {
 
         const updateUserData = await Customers.update(
-            {
-                inCart: sequelize.literal(`array_append("inCart", ${req.body.productId})`),
-            },
-            {
-                where: { id: req.body.userId }
-            }
+            { inCart: sequelize.literal(`array_append("inCart", ${req.body.productId})`), },
+            { where: { id: req.body.userId } }
         );
 
         if (updateUserData) {
-            res.status(200).json({ msg: "Data Added In Cart Successfully", success: true })
+            res.status(200).json({ msg: "Product Added In Cart Successfully", success: true })
         } else {
-            res.status(500).json({ msg: "Data Not Added In Cart", success: false })
+            res.status(500).json({ msg: "Product Not Added In Cart", success: false })
         }
-    } catch (error) {
-        console.error('Error updating customer cart:', error);
+    } catch (Err) {
+        console.error('Error Found While Updating User Cart:', Err);
+        res.status(500).json({ msg: "Fail To Update User Cart", success: false })
     }
 
 }
@@ -81,13 +83,13 @@ const GetUserCart = async (req, res) => {
         })
 
         if (CartShowProducts) {
-            res.status(200).json({ msg: "User Selected Product retrieve successfully", success: true, data: CartShowProducts })
+            res.status(200).json({ msg: "Successfull To Retrieve User Cart Products", success: true, data: CartShowProducts })
         } else {
-            res.status(500).json({ msg: "Didn't get user selected products", success: false })
+            res.status(500).json({ msg: "Unsuccessfull To Retrieve User Cart Products", success: false })
         }
-    } catch (err) {
-        console.log("ERROR FOUND: ", err)
-        res.status(500).json({ msg: "Error Found", success: false })
+    } catch (Err) {
+        console.error('Error Found While Retrieve User Cart Products:', Err);
+        res.status(500).json({ msg: "Fail To Retrieve User Cart Products", success: false })
     }
 
 }
@@ -146,6 +148,7 @@ const GetUserWishlist = async (req, res) => {
             where: { id: userId }
         })
 
+
         const userWishlistProducts = userInfo.dataValues.inWishlist
 
         const WishlistShowProducts = await Products.findAll({
@@ -158,7 +161,8 @@ const GetUserWishlist = async (req, res) => {
         } else {
             res.status(500).json({ msg: "Didn't get user wishlist products", success: false })
         }
-    } catch (err) {
+
+    } catch (Err) {
         console.log("Error Found While Getting User Wishlist", Err)
         res.status(500).json({ msg: "Fail to get user wishlist", success: false })
     }
@@ -208,5 +212,19 @@ const GetCategories = async (req, res) => {
 
 }
 
+const GetPurchaseSteps = async (req, res) => {
+    try {
 
-module.exports = { GetProductData, GetProduct, AddCart, GetUserCart, RemoveFromCart, AddWishlist, GetUserWishlist, RemoveFromWishlist, GetCategories } 
+        const PurchaseStepsForms = await PurchaseSteps.findAll()
+        if (PurchaseStepsForms) {
+            res.status(200).json({msg: "Succesfully Get All The Steps Form Of Purchase", success: true, StepsFormdata: PurchaseStepsForms})
+        } else {
+            res.status(500).json({msg: "Unsuccesfully To Get All Steps Form", success: false})
+        }
+    } catch (Err) {
+        console.log("Error Found While Getting Purchase Steps: ", Err)
+        res.status(500).json({msg: "Faild To Get All Steps Of Purchase", success: false})
+    }
+}
+
+module.exports = { GetProductData, GetProduct, AddCart, GetUserCart, RemoveFromCart, AddWishlist, GetUserWishlist, RemoveFromWishlist, GetCategories, GetPurchaseSteps } 

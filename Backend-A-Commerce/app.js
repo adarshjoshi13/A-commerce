@@ -32,6 +32,7 @@ app.post('/add-wishlist', homecontroller.AddWishlist);
 app.get('/get-user-wishlist/:userId', homecontroller.GetUserWishlist);
 app.post('/remove-from-wishlist', homecontroller.RemoveFromWishlist);
 app.get('/get-categories', homecontroller.GetCategories);
+app.get('/get-purchase-form', homecontroller.GetPurchaseSteps);
 
 
 app.listen(process.env.PORT, () => {
