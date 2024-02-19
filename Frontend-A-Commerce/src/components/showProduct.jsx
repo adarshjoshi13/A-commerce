@@ -90,10 +90,10 @@ export default function ShowProduct(props) {
                     <div id={props.id} className="product-box p-3 d-flex flex-column justify-content-center align-content-center m-2 my-5">
                         <h1>{props.productName}</h1>
                         <p>{props.productDescription}</p>
-                        <p>{props.price}</p>
+                        <p className="fs-4 fw-bold">₹{props.price}</p>
 
                         <div className="d-flex justify-content-between align-items-center">
-                            <Link to={`/product-page/${props.id}`}><button type="btn" className="btn-primary btn">Purchase</button></Link>
+                            <Link to={`/product-purhchase/${props.id}`}><button type="btn" className="btn-primary btn">Buy Now</button></Link>
 
                             <div className="d-flex justify-content-between">
                                 <button type="btn" className="btn-primary btn mx-3" onClick={() => { AddCart(props.id) }}>Add To cart</button>

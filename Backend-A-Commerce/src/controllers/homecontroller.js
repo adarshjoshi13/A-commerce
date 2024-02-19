@@ -1,14 +1,20 @@
 
-const { Customers, Products } = require('../models/index')
+const { Customers, Products, Categories } = require('../models/index')
 const { sequelize } = require('../models/index');
 require('dotenv').config();
 
 
 const GetProductData = async (req, res) => {
-    const [results, metadata] = await sequelize.query('SELECT * FROM products')
 
-    if (results) {
-        res.status(200).json({ msg: "Successfull To Get Data!!", status: false, ProductsData: results })
+    let CategoryId = req.params.catId
+
+    const AllProducts = await Products.findAll({
+        where: { catId: CategoryId }
+    })
+
+
+    if (AllProducts) {
+        res.status(200).json({ msg: "Successfull To Get Data!!", status: false, ProductsData: AllProducts })
     } else {
         res.status(500).json({ msg: "Unsuccessfull To Get Data!!", status: false })
     }
@@ -180,5 +186,27 @@ const RemoveFromWishlist = async (req, res) => {
 
 }
 
+const GetCategories = async (req, res) => {
 
-module.exports = { GetProductData, GetProduct, AddCart, GetUserCart, RemoveFromCart, AddWishlist, GetUserWishlist, RemoveFromWishlist } 
+    try {
+
+        const AllCategories = await Categories.findAll({
+            attributes: ['id', 'name', 'image'],
+            exclude: ['createdAt', 'updatedAt']
+        })
+
+        if (AllCategories) {
+            res.status(200).json({ msg: "All categories selected", success: true, data: AllCategories })
+        } else {
+            res.status(500).json({ msg: "Categories not selected", success: false })
+        }
+
+    } catch (Err) {
+        console.log("Error found while getting categories", Err)
+        res.status(500).json({ msg: "Fail to select categories", success: false })
+    }
+
+}
+
+
+module.exports = { GetProductData, GetProduct, AddCart, GetUserCart, RemoveFromCart, AddWishlist, GetUserWishlist, RemoveFromWishlist, GetCategories } 

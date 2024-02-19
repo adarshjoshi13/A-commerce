@@ -1,6 +1,7 @@
 import axios from "axios"
 import { Link } from "react-router-dom"
 import Cookies from "js-cookie"
+import { useState } from "react";
 
 export default function WishlistProduct(props) {
 
