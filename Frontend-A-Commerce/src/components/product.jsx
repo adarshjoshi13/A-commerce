@@ -8,7 +8,9 @@ export default function Product(props) {
                 <p>{props.productDescription}</p>
                 <p>{props.price}</p>
 
-                <Link to={`/product-page/${props.id}`}><button type="btn" className="btn-primary btn">Purchase</button></Link>
+                <Link to={`/product-page/${props.productName}/${props.id}`}>
+                    <button type="btn" className="btn-primary btn">Purchase</button>
+                </Link>
             </div>
         </>
     )

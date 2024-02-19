@@ -11,6 +11,20 @@ module.exports = function (sequelize, DataTypes) {
             notEmpty: true
          }
       },
+      catId: {
+         type: DataTypes.INTEGER,
+         allowNull: false,
+         validate: {
+            notEmpty: true
+         }
+      },
+      reviewId: {
+         type: DataTypes.INTEGER(),
+         allowNull: false,
+         validate: {
+            notEmpty: true
+         }
+      },
       name: {
          type: DataTypes.STRING(50),
          allowNull: false,
@@ -26,28 +40,14 @@ module.exports = function (sequelize, DataTypes) {
          }
       },
       price: {
-         type: DataTypes.INTEGER(),
+         type: DataTypes.STRING,
          allowNull: false,
          validate: {
             notEmpty: true
          }
       },
-      imageId: {
-         type: DataTypes.INTEGER(),
-         allowNull: false,
-         validate: {
-            notEmpty: true
-         }
-      },
-      categoryId: {
-         type: DataTypes.INTEGER(),
-         allowNull: false,
-         validate: {
-            notEmpty: true
-         }
-      },
-      reviewId: {
-         type: DataTypes.INTEGER(),
+      images: {
+         type: DataTypes.ARRAY(DataTypes.STRING),
          allowNull: false,
          validate: {
             notEmpty: true
@@ -56,6 +56,6 @@ module.exports = function (sequelize, DataTypes) {
    }, {
       sequelize,
       tableName: 'products',
-      timestamps: false
+      timestamps: true
    })
 }

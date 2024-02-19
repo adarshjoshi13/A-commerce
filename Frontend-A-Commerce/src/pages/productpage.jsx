@@ -10,12 +10,12 @@ const ProductPage = () => {
     const [productData, setProductData] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const { id } = useParams();
+    const Params = useParams();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/get-product/${id}`);
+                const response = await axios.get(`http://localhost:3000/get-product/${Params.id}`);
 
                 if (response.data.productData) {
                     setProductData(response.data.productData);
@@ -27,7 +27,7 @@ const ProductPage = () => {
         };
 
         fetchData();
-    }, [id]);
+    }, []);
 
     const Products = () => {
         if (loading) {
