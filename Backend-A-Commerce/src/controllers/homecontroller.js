@@ -215,15 +215,18 @@ const GetCategories = async (req, res) => {
 const GetPurchaseSteps = async (req, res) => {
     try {
 
-        const PurchaseStepsForms = await PurchaseSteps.findAll()
+        const PurchaseStepsForms = await PurchaseSteps.findAll({
+            order: [['id', 'ASC']]
+        });
+
         if (PurchaseStepsForms) {
-            res.status(200).json({msg: "Succesfully Get All The Steps Form Of Purchase", success: true, StepsFormdata: PurchaseStepsForms})
+            res.status(200).json({ msg: "Succesfully Get All The Steps Form Of Purchase", success: true, StepsFormdata: PurchaseStepsForms })
         } else {
-            res.status(500).json({msg: "Unsuccesfully To Get All Steps Form", success: false})
+            res.status(500).json({ msg: "Unsuccesfully To Get All Steps Form", success: false })
         }
     } catch (Err) {
         console.log("Error Found While Getting Purchase Steps: ", Err)
-        res.status(500).json({msg: "Faild To Get All Steps Of Purchase", success: false})
+        res.status(500).json({ msg: "Faild To Get All Steps Of Purchase", success: false })
     }
 }
 

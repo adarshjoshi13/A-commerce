@@ -11,15 +11,22 @@ module.exports = function (sequelize, DataTypes) {
                 notEmpty: true
             }
         },
+        stepNumber: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
+        },
         stepName: {
-            type: DataTypes.STRING(100),
+            type: DataTypes.TEXT,
             allowNull: false,
             validate: {
                 notEmpty: true
             }
         },
         stepForm: {
-            type: DataTypes.JSON,
+            type: DataTypes.TEXT,
             allowNull: false,
             validate: {
               notEmpty: true,
