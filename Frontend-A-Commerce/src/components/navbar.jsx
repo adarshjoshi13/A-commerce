@@ -39,8 +39,16 @@ export default function Navbar() {
                         </div>
 
                         {storedToken ?
-
-                            <h5 role="button" onClick={handleLogout} className='fw-bold m-0 p-0 cursor-pointer'> Log Out</h5>
+                            <li className="nav-item dropdown list-unstyled mx-2">
+                                <a className="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    My Profile
+                                </a>
+                                <ul className="dropdown-menu">
+                                    <Link to='/my-orders' className="dropdown-item">My Orders</Link>
+                                    <li><hr className="dropdown-divider" /></li>
+                                    <Link to='/signup' className="dropdown-item" onClick={handleLogout}>Log Out</Link>
+                                </ul>
+                            </li>
                             :
                             <li className="nav-item dropdown list-unstyled mx-2">
 

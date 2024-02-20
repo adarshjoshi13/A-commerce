@@ -1,5 +1,5 @@
 
-const { Customers, Products, Categories, PurchaseSteps } = require('../models/index')
+const { Customers, Products, Categories, PurchaseSteps, Orders } = require('../models/index')
 const { sequelize } = require('../models/index');
 require('dotenv').config();
 
@@ -230,4 +230,83 @@ const GetPurchaseSteps = async (req, res) => {
     }
 }
 
-module.exports = { GetProductData, GetProduct, AddCart, GetUserCart, RemoveFromCart, AddWishlist, GetUserWishlist, RemoveFromWishlist, GetCategories, GetPurchaseSteps } 
+const ListProductOrder = async (req, res) => {
+    ProductInfo = req.body
+    try {
+
+        const ListOrder = Orders.create({
+            deliveryInfo: ProductInfo,
+            orderedProduct: ProductInfo.productId,
+            orderBy: ProductInfo.userId
+        })
+
+        const updateUserData = await Customers.update(
+            { orders: sequelize.literal(`array_append("orders", ${ProductInfo.productId})`), },
+            { where: { id: ProductInfo.userId } }
+        );
+
+        if (ListOrder) {
+            res.status(200).json({ msg: "Product Order Successfully", success: true })
+        } else {
+            res.status(500).json({ msg: "Product Not Orderd", success: false })
+        }
+    } catch (Err) {
+        console.log("Error Found While Listing Order: ", Err)
+        res.status(500).json({ msg: "Failed to order Product", success: false })
+    }
+}
+
+const GetUserOrders = async (req, res) => {
+    try {
+        const userId = req.params.userId
+        const userInfo = await Customers.findOne({
+            where: { id: userId }
+        })
+
+
+        const userOrderedProducts = userInfo.dataValues.orders
+
+        const OrderedProducts = await Products.findAll({
+            where: { id: userOrderedProducts }
+        })
+
+
+        if (OrderedProducts) {
+            res.status(200).json({ msg: "User Ordered Products retrieve successfully", success: true, data: OrderedProducts })
+        } else {
+            res.status(500).json({ msg: "Didn't get user Ordered Products", success: false })
+        }
+
+    } catch (Err) {
+        console.log("Error Found While Getting User Orders", Err)
+        res.status(500).json({ msg: "Fail to get user Orders", success: false })
+    }
+}
+
+const CancelOrder = async (req, res) => {
+    try {
+        let ProductId = req.body.productId
+        let UserId = req.body.userId
+
+        const updatedCustomer = await Customers.update(
+            { orders: sequelize.literal(`array_remove("orders", ${ProductId})`) },
+            { where: { id: UserId } }
+        );
+
+        const updatedOrder = await Orders.destroy({
+            where: { orderedProduct: ProductId }
+        });
+
+        if (updatedCustomer && updatedOrder) {
+            res.status(200).json({ msg: "Order Cancelled Successfully", success: true })
+        } else {
+            res.status(500).json({ msg: "Order Not Cancelled Successfully", success: false })
+        }
+    } catch (Err) {
+        console.log("Error Found While Removing From Orders", Err)
+        res.status(500).json({ msg: "Fail to remove from orders", success: false })
+    }
+
+}
+
+module.exports = { GetProductData, GetProduct, AddCart, GetUserCart, RemoveFromCart, AddWishlist, GetUserWishlist, RemoveFromWishlist, GetCategories, GetPurchaseSteps, ListProductOrder, GetUserOrders, CancelOrder } 

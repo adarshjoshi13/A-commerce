@@ -50,6 +50,11 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.ARRAY(DataTypes.INTEGER),
             allowNull: true,
             defaultValue: []
+        },
+        orders: {
+            type: DataTypes.ARRAY(DataTypes.INTEGER),
+            allowNull: true,
+            defaultValue: []
         }
     }, {
         sequelize,

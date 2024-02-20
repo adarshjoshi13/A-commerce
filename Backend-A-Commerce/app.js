@@ -33,7 +33,9 @@ app.get('/get-user-wishlist/:userId', homecontroller.GetUserWishlist);
 app.post('/remove-from-wishlist', homecontroller.RemoveFromWishlist);
 app.get('/get-categories', homecontroller.GetCategories);
 app.get('/get-purchase-form', homecontroller.GetPurchaseSteps);
-
+app.post('/list-product-order', homecontroller.ListProductOrder);
+app.get('/get-user-orders/:userId', homecontroller.GetUserOrders);
+app.post('/cancel-order', homecontroller.CancelOrder);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
