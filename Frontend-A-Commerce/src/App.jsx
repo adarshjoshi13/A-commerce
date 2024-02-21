@@ -8,6 +8,9 @@ import LoginPage from './pages/loginPage'
 import CartPage from './pages/cartPage'
 import WishlistPage from './pages/wishlistPage'
 import PurchasePage from './pages/purchasePage'
+import Orders from './pages/ordersPage'
+import SearchResultPage from './pages/searchResultPage'
+import FilterResultPage from './pages/filterResultPage'
 
 function App() {
   return (
@@ -22,7 +25,10 @@ function App() {
           <Route path='/login' element={<LoginPage />} />
           <Route path='/my-cart' element={<CartPage />} />
           <Route path='/my-wishlist' element={<WishlistPage />} />
+          <Route path='/my-orders' element={<Orders />} />
           <Route path='/product-purhchase/:productId' element={<PurchasePage />} />
+          <Route path='/search-results/:searchedKey' element={<SearchResultPage />} />
+          <Route path='/filter-results/:searchedKey/:sort' element={<FilterResultPage />} />
         </Routes>
       </Router>
     </>

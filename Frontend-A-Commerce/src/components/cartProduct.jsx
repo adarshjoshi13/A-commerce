@@ -27,7 +27,7 @@ export default function CartProduct(props) {
         <>
 
             <div id={props.id} className="product-box p-3 d-flex flex-column justify-content-center align-content-center m-2 my-5">
-                <Link to={`/product-page/${props.id}`} className='text-reset text-decoration-none'>
+                <Link to={`/product-page/${props.productName}/${props.id}`} className='text-reset text-decoration-none'>
                     <h1 >{props.productName}</h1>
                 </Link>
 

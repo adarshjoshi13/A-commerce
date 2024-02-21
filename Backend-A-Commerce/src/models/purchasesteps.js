@@ -1,7 +1,7 @@
 const sequelize = require("sequelize")
 
 module.exports = function (sequelize, DataTypes) {
-    return sequelize.define('purchaseStepper', {
+    return sequelize.define('purchase_steps', {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -11,23 +11,30 @@ module.exports = function (sequelize, DataTypes) {
                 notEmpty: true
             }
         },
+        stepNumber: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
+        },
         stepName: {
-            type: DataTypes.STRING(100),
+            type: DataTypes.TEXT,
             allowNull: false,
             validate: {
                 notEmpty: true
             }
         },
         stepForm: {
-            type: DataTypes.ARRAY(DataTypes.STRING),
+            type: DataTypes.TEXT,
             allowNull: false,
             validate: {
-                notEmpty: true
-            }
-        }
+              notEmpty: true,
+            },        
+          },        
     }, {
         sequelize,
-        tableName: 'purchaseStepper',
+        tableName: 'purchase_steps',
         timestamps: false
     })
 }

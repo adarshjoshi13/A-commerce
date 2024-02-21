@@ -14,6 +14,8 @@ const GetOtps = require('./getotps')(sequelize, Sequelize);
 const Customers = require('./customers')(sequelize, Sequelize);
 const Products = require('./products')(sequelize, Sequelize);
 const Categories = require('./categories')(sequelize, Sequelize);
+const PurchaseSteps = require('./purchasesteps')(sequelize, Sequelize);
+const Orders = require('./orders')(sequelize, Sequelize);
 
 const Connection = async () => {
     try {
@@ -34,4 +36,4 @@ const Connection = async () => {
     }
 };
 
-module.exports = { Connection, GetOtps, Customers, Products, Categories, sequelize }
+module.exports = { Connection, GetOtps, Customers, Products, Categories, PurchaseSteps, Orders, sequelize }

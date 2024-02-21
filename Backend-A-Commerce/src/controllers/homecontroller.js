@@ -1,22 +1,28 @@
 
-const { Customers, Products, Categories } = require('../models/index')
+const { Customers, Products, Categories, PurchaseSteps, Orders } = require('../models/index')
 const { sequelize } = require('../models/index');
+const products = require('../models/products');
 require('dotenv').config();
 
 
 const GetProductData = async (req, res) => {
 
-    let CategoryId = req.params.catId
+    try {
+        let CategoryId = req.params.catId
 
-    const AllProducts = await Products.findAll({
-        where: { catId: CategoryId }
-    })
+        const AllProducts = await Products.findAll({
+            where: { catId: CategoryId }
+        })
 
 
-    if (AllProducts) {
-        res.status(200).json({ msg: "Successfull To Get Data!!", status: false, ProductsData: AllProducts })
-    } else {
-        res.status(500).json({ msg: "Unsuccessfull To Get Data!!", status: false })
+        if (AllProducts) {
+            res.status(200).json({ msg: "Successfull To Find All Products Data!!", status: false, ProductsData: AllProducts })
+        } else {
+            res.status(500).json({ msg: "Fail To Find All Products Data!!", status: false })
+        }
+    } catch (Err) {
+        console.log("Error Found Whille Find All Products Data", err)
+        res.status(500).json({ msg: "Fail To Find All Products Data!!", status: false })
     }
 }
 
@@ -35,9 +41,9 @@ const GetProduct = async (req, res) => {
             res.status(500).json({ msg: "Product Not Found!!", success: false })
         }
 
-    } catch (err) {
-        console.log("Error Found Whille Getting Product", err)
-        res.status(500).json({ msg: "Fail To Get!!", success: false })
+    } catch (Err) {
+        console.log("Error Found While Finding Product", Err)
+        res.status(500).json({ msg: "Fail To Find Product!!", success: false })
     }
 
 }
@@ -47,21 +53,18 @@ const AddCart = async (req, res) => {
     try {
 
         const updateUserData = await Customers.update(
-            {
-                inCart: sequelize.literal(`array_append("inCart", ${req.body.productId})`),
-            },
-            {
-                where: { id: req.body.userId }
-            }
+            { inCart: sequelize.literal(`array_append("inCart", ${req.body.productId})`), },
+            { where: { id: req.body.userId } }
         );
 
         if (updateUserData) {
-            res.status(200).json({ msg: "Data Added In Cart Successfully", success: true })
+            res.status(200).json({ msg: "Product Added In Cart Successfully", success: true })
         } else {
-            res.status(500).json({ msg: "Data Not Added In Cart", success: false })
+            res.status(500).json({ msg: "Product Not Added In Cart", success: false })
         }
-    } catch (error) {
-        console.error('Error updating customer cart:', error);
+    } catch (Err) {
+        console.error('Error Found While Updating User Cart:', Err);
+        res.status(500).json({ msg: "Fail To Update User Cart", success: false })
     }
 
 }
@@ -81,13 +84,13 @@ const GetUserCart = async (req, res) => {
         })
 
         if (CartShowProducts) {
-            res.status(200).json({ msg: "User Selected Product retrieve successfully", success: true, data: CartShowProducts })
+            res.status(200).json({ msg: "Successfull To Retrieve User Cart Products", success: true, data: CartShowProducts })
         } else {
-            res.status(500).json({ msg: "Didn't get user selected products", success: false })
+            res.status(500).json({ msg: "Unsuccessfull To Retrieve User Cart Products", success: false })
         }
-    } catch (err) {
-        console.log("ERROR FOUND: ", err)
-        res.status(500).json({ msg: "Error Found", success: false })
+    } catch (Err) {
+        console.error('Error Found While Retrieve User Cart Products:', Err);
+        res.status(500).json({ msg: "Fail To Retrieve User Cart Products", success: false })
     }
 
 }
@@ -146,6 +149,7 @@ const GetUserWishlist = async (req, res) => {
             where: { id: userId }
         })
 
+
         const userWishlistProducts = userInfo.dataValues.inWishlist
 
         const WishlistShowProducts = await Products.findAll({
@@ -158,7 +162,8 @@ const GetUserWishlist = async (req, res) => {
         } else {
             res.status(500).json({ msg: "Didn't get user wishlist products", success: false })
         }
-    } catch (err) {
+
+    } catch (Err) {
         console.log("Error Found While Getting User Wishlist", Err)
         res.status(500).json({ msg: "Fail to get user wishlist", success: false })
     }
@@ -208,5 +213,197 @@ const GetCategories = async (req, res) => {
 
 }
 
+const GetPurchaseSteps = async (req, res) => {
+    try {
 
-module.exports = { GetProductData, GetProduct, AddCart, GetUserCart, RemoveFromCart, AddWishlist, GetUserWishlist, RemoveFromWishlist, GetCategories } 
+        const PurchaseStepsForms = await PurchaseSteps.findAll({
+            order: [['id', 'ASC']]
+        });
+
+        if (PurchaseStepsForms) {
+            res.status(200).json({ msg: "Succesfully Get All The Steps Form Of Purchase", success: true, StepsFormdata: PurchaseStepsForms })
+        } else {
+            res.status(500).json({ msg: "Unsuccesfully To Get All Steps Form", success: false })
+        }
+    } catch (Err) {
+        console.log("Error Found While Getting Purchase Steps: ", Err)
+        res.status(500).json({ msg: "Faild To Get All Steps Of Purchase", success: false })
+    }
+}
+
+const ListProductOrder = async (req, res) => {
+    ProductInfo = req.body
+    try {
+
+        const ListOrder = Orders.create({
+            deliveryInfo: ProductInfo,
+            orderedProduct: ProductInfo.productId,
+            orderBy: ProductInfo.userId
+        })
+
+        const updateUserData = await Customers.update(
+            { orders: sequelize.literal(`array_append("orders", ${ProductInfo.productId})`), },
+            { where: { id: ProductInfo.userId } }
+        );
+
+        if (ListOrder) {
+            res.status(200).json({ msg: "Product Order Successfully", success: true })
+        } else {
+            res.status(500).json({ msg: "Product Not Orderd", success: false })
+        }
+    } catch (Err) {
+        console.log("Error Found While Listing Order: ", Err)
+        res.status(500).json({ msg: "Failed to order Product", success: false })
+    }
+}
+
+const GetUserOrders = async (req, res) => {
+    try {
+        const userId = req.params.userId
+        const userInfo = await Customers.findOne({
+            where: { id: userId }
+        })
+
+
+        const userOrderedProducts = userInfo.dataValues.orders
+
+        const OrderedProducts = await Products.findAll({
+            where: { id: userOrderedProducts }
+        })
+
+
+        if (OrderedProducts) {
+            res.status(200).json({ msg: "User Ordered Products retrieve successfully", success: true, data: OrderedProducts })
+        } else {
+            res.status(500).json({ msg: "Didn't get user Ordered Products", success: false })
+        }
+
+    } catch (Err) {
+        console.log("Error Found While Getting User Orders", Err)
+        res.status(500).json({ msg: "Fail to get user Orders", success: false })
+    }
+}
+
+const CancelOrder = async (req, res) => {
+    try {
+        let ProductId = req.body.productId
+        let UserId = req.body.userId
+
+        const updatedCustomer = await Customers.update(
+            { orders: sequelize.literal(`array_remove("orders", ${ProductId})`) },
+            { where: { id: UserId } }
+        );
+
+        const updatedOrder = await Orders.destroy({
+            where: { orderedProduct: ProductId }
+        });
+
+        if (updatedCustomer && updatedOrder) {
+            res.status(200).json({ msg: "Order Cancelled Successfully", success: true })
+        } else {
+            res.status(500).json({ msg: "Order Not Cancelled Successfully", success: false })
+        }
+    } catch (Err) {
+        console.log("Error Found While Removing From Orders", Err)
+        res.status(500).json({ msg: "Fail to remove from orders", success: false })
+    }
+
+}
+
+const GetRelatedSearchSuggestion = async (req, res) => {
+
+    try {
+        const searchedKey = req.params.searchedKey
+
+        const { Op } = require('sequelize');
+
+        const ProductInfo = await Products.findAll({
+            where: {
+                name: {
+                    [Op.iLike]: `%${searchedKey}%`
+                },
+                description: {
+                    [Op.iLike]: `%${searchedKey}%`
+                }
+            }
+        });
+
+        if (ProductInfo) {
+            res.status(200).json({ msg: "Successfull To Retrieve Search Related Products", success: true, data: ProductInfo })
+        } else {
+            res.status(500).json({ msg: "Unsuccessfull To Retrieve Search Related Products", success: false })
+        }
+    } catch (Err) {
+        console.error('Error Found While Retrieve Search Related Products:', Err);
+        res.status(500).json({ msg: "Fail To Retrieve Search Related Products", success: false })
+    }
+
+}
+
+const GetSearchedProducts = async (req, res) => {
+
+    try {
+        let searchedKey = req.params.searchedKey
+        console.log(searchedKey)
+        const { Op } = require('sequelize');
+
+        const ProductsInfo = await Products.findAll({
+            where: {
+                name: {
+                    [Op.iLike]: `%${searchedKey}%`
+                },
+                description: {
+                    [Op.iLike]: `%${searchedKey}%`
+                }
+            }
+        });
+
+        if (ProductsInfo) {
+            res.status(200).json({ msg: "Successfull To Retrieve Searched Products", success: true, data: ProductsInfo })
+        } else {
+            res.status(500).json({ msg: "Unsuccessfull To Retrieve Searched Products", success: false })
+        }
+    } catch (Err) {
+        console.error('Error Found While Retrieve Searched Products:', Err);
+        res.status(500).json({ msg: "Fail To Retrieve Searched Products", success: false })
+    }
+
+}
+
+const GetFilterProducts = async (req, res) => {
+
+    try {
+        let FilterKeys = req.query;
+        console.log(FilterKeys);
+
+        const { Op } = require('sequelize');
+
+        const sortingOrder = FilterKeys.sort === '1' ? 'ASC' : 'DESC';
+
+        const ProductsInfo = await Products.findAll({
+            where: {
+                name: {
+                    [Op.iLike]: `%${FilterKeys.name}%`
+                },
+                description: {
+                    [Op.iLike]: `%${FilterKeys.name}%`
+                }
+            },
+            order: [['price', sortingOrder]]
+        });
+
+        console.log(ProductsInfo)
+        if (ProductsInfo) {
+            res.status(200).json({ msg: "Successfull To Retrieve Searched Products", success: true, data: ProductsInfo })
+        } else {
+            res.status(500).json({ msg: "Unsuccessfull To Retrieve Searched Products", success: false })
+        }
+    } catch (Err) {
+        console.error('Error Found While Retrieve Searched Products:', Err);
+        res.status(500).json({ msg: "Fail To Retrieve Searched Products", success: false })
+    }
+
+}
+
+
+module.exports = { GetProductData, GetProduct, AddCart, GetUserCart, RemoveFromCart, AddWishlist, GetUserWishlist, RemoveFromWishlist, GetCategories, GetPurchaseSteps, ListProductOrder, GetUserOrders, CancelOrder, GetRelatedSearchSuggestion, GetSearchedProducts, GetFilterProducts } 
