@@ -36,6 +36,9 @@ app.get('/get-purchase-form', homecontroller.GetPurchaseSteps);
 app.post('/list-product-order', homecontroller.ListProductOrder);
 app.get('/get-user-orders/:userId', homecontroller.GetUserOrders);
 app.post('/cancel-order', homecontroller.CancelOrder);
+app.get('/get-search-result/:searchedKey', homecontroller.GetRelatedSearchSuggestion);
+app.get('/get-searched-products/:searchedKey', homecontroller.GetSearchedProducts);
+app.get('/get-filter-products', homecontroller.GetFilterProducts);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);

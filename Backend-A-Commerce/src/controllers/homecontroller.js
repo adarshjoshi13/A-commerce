@@ -1,6 +1,7 @@
 
 const { Customers, Products, Categories, PurchaseSteps, Orders } = require('../models/index')
 const { sequelize } = require('../models/index');
+const products = require('../models/products');
 require('dotenv').config();
 
 
@@ -309,4 +310,100 @@ const CancelOrder = async (req, res) => {
 
 }
 
-module.exports = { GetProductData, GetProduct, AddCart, GetUserCart, RemoveFromCart, AddWishlist, GetUserWishlist, RemoveFromWishlist, GetCategories, GetPurchaseSteps, ListProductOrder, GetUserOrders, CancelOrder } 
+const GetRelatedSearchSuggestion = async (req, res) => {
+
+    try {
+        const searchedKey = req.params.searchedKey
+
+        const { Op } = require('sequelize');
+
+        const ProductInfo = await Products.findAll({
+            where: {
+                name: {
+                    [Op.iLike]: `%${searchedKey}%`
+                },
+                description: {
+                    [Op.iLike]: `%${searchedKey}%`
+                }
+            }
+        });
+
+        if (ProductInfo) {
+            res.status(200).json({ msg: "Successfull To Retrieve Search Related Products", success: true, data: ProductInfo })
+        } else {
+            res.status(500).json({ msg: "Unsuccessfull To Retrieve Search Related Products", success: false })
+        }
+    } catch (Err) {
+        console.error('Error Found While Retrieve Search Related Products:', Err);
+        res.status(500).json({ msg: "Fail To Retrieve Search Related Products", success: false })
+    }
+
+}
+
+const GetSearchedProducts = async (req, res) => {
+
+    try {
+        let searchedKey = req.params.searchedKey
+        console.log(searchedKey)
+        const { Op } = require('sequelize');
+
+        const ProductsInfo = await Products.findAll({
+            where: {
+                name: {
+                    [Op.iLike]: `%${searchedKey}%`
+                },
+                description: {
+                    [Op.iLike]: `%${searchedKey}%`
+                }
+            }
+        });
+
+        if (ProductsInfo) {
+            res.status(200).json({ msg: "Successfull To Retrieve Searched Products", success: true, data: ProductsInfo })
+        } else {
+            res.status(500).json({ msg: "Unsuccessfull To Retrieve Searched Products", success: false })
+        }
+    } catch (Err) {
+        console.error('Error Found While Retrieve Searched Products:', Err);
+        res.status(500).json({ msg: "Fail To Retrieve Searched Products", success: false })
+    }
+
+}
+
+const GetFilterProducts = async (req, res) => {
+
+    try {
+        let FilterKeys = req.query;
+        console.log(FilterKeys);
+
+        const { Op } = require('sequelize');
+
+        const sortingOrder = FilterKeys.sort === '1' ? 'ASC' : 'DESC';
+
+        const ProductsInfo = await Products.findAll({
+            where: {
+                name: {
+                    [Op.iLike]: `%${FilterKeys.name}%`
+                },
+                description: {
+                    [Op.iLike]: `%${FilterKeys.name}%`
+                }
+            },
+            order: [['price', sortingOrder]]
+        });
+
+        console.log(ProductsInfo)
+        if (ProductsInfo) {
+            res.status(200).json({ msg: "Successfull To Retrieve Searched Products", success: true, data: ProductsInfo })
+        } else {
+            res.status(500).json({ msg: "Unsuccessfull To Retrieve Searched Products", success: false })
+        }
+    } catch (Err) {
+        console.error('Error Found While Retrieve Searched Products:', Err);
+        res.status(500).json({ msg: "Fail To Retrieve Searched Products", success: false })
+    }
+
+}
+
+
+module.exports = { GetProductData, GetProduct, AddCart, GetUserCart, RemoveFromCart, AddWishlist, GetUserWishlist, RemoveFromWishlist, GetCategories, GetPurchaseSteps, ListProductOrder, GetUserOrders, CancelOrder, GetRelatedSearchSuggestion, GetSearchedProducts, GetFilterProducts } 
