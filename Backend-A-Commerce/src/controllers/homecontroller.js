@@ -264,7 +264,6 @@ const GetUserOrders = async (req, res) => {
             where: { id: userId }
         })
 
-
         const userOrderedProducts = userInfo.dataValues.orders
 
         const OrderedProducts = await Products.findAll({

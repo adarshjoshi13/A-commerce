@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import Filter from '../components/filter'
-import SearchedProduct from '../components/SearchedProduct';
+import SearchedProduct from '../products/searchedProduct';
 
 const SearchResultPage = () => {
     const Params = useParams();
