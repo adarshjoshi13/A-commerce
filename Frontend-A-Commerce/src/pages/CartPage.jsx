@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import CartProduct from "../components/cartProduct";
+import CartProduct from "../products/cartProduct";
 import Cookies from "js-cookie";
 
 export default function CartProducts() {

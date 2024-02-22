@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useState } from "react"
 import { useEffect } from "react"
-import WishlistProduct from "../components/wishlistProduct"
+import WishlistProduct from "../products/wishlistProduct"
 import Cookies from "js-cookie"
 
 export default function WishlistPage() {

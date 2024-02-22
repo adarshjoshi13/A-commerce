@@ -1,7 +1,6 @@
 import React from 'react'
 
 export default function Loader() {
-    console.log("loading..")
     return (
         <h1 className='loading-heading'>
             <span className="let1">l</span>

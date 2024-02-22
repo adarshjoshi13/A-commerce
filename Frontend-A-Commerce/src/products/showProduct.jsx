@@ -2,11 +2,14 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 export default function ShowProduct(props) {
     const [userWishlistData, setUserWishlistData] = useState([]);
     const [userId, setUserId] = useState(Cookies.get('userId'));
     const [loading, setLoading] = useState(false);
+
+    const Naviagte = useNavigate()
 
     const GetUserData = async () => {
         try {
@@ -25,8 +28,9 @@ export default function ShowProduct(props) {
     }
 
     useEffect(() => {
-
-        GetUserData();
+        if (userId) {
+            GetUserData();
+        }
 
     }, []);
 
@@ -46,6 +50,10 @@ export default function ShowProduct(props) {
     };
 
     const AddWishlist = async (id) => {
+
+        if (!userId) {
+
+        }
         try {
             const UpdateUserWishlist = await axios.post('http://localhost:3000/add-wishlist', { productId: id, userId }, {
                 headers: {
@@ -100,7 +108,15 @@ export default function ShowProduct(props) {
                                 {
                                     userWishlistData.includes(props.id) ?
                                         <i className="fs-3 m-0 p-0 bi bi-heart-fill" role="button" onClick={() => { RemoveFromWishlist(props.id) }}></i> :
-                                        <i className="fs-3 m-0 p-0 bi bi-heart" role="button" onClick={() => { AddWishlist(props.id) }}></i>
+                                        <i className="fs-3 m-0 p-0 bi bi-heart" role="button" onClick={
+                                            () => {
+                                                if (userId) {
+                                                    AddWishlist(props.id)
+                                                } else {
+                                                    Naviagte('/login')
+                                                }
+                                            }
+                                        }></i>
                                 }
                             </div>
                         </div>

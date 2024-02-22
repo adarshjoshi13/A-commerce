@@ -1,10 +1,10 @@
 import axios from "axios"
 import { useState } from "react"
 import { useEffect } from "react"
-import OrderedProduct from "../components/orderedProduct"
+import OrderedProduct from "../products/orderedProduct"
 import Cookies from "js-cookie"
 
-export default function WishlistPage() {
+export default function Orders() {
 
     const [userOrderedProducts, setUserOrderedProducts] = useState([])
     const [loader, setLoader] = useState(false)
@@ -24,7 +24,6 @@ export default function WishlistPage() {
         }
 
     }
-
 
     useEffect(() => {
         if (userId) {
