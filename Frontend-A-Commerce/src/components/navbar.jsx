@@ -14,7 +14,7 @@ export default function Navbar() {
             <nav className="navbar navbar-expand-lg bg-body-tertiary">
                 <div className="container-fluid" id="nav-container">
                     <Link to="/" className="navbar-brand fw-bold">HOME</Link>
-                    <SearchBar/>
+                    <SearchBar />
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
@@ -50,15 +50,15 @@ export default function Navbar() {
                                 </ul>
                             </li>
                             :
-                            <li className="nav-item dropdown list-unstyled mx-2">
 
+                            <li className="nav-item dropdown list-unstyled mx-2">
                                 <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Account
                                 </a>
                                 <ul className="dropdown-menu">
-                                    <Link to='/login' className="dropdown-item">Log In</Link>
+                                    <Link to='/buyer-signin' className="dropdown-item">Want To Buy</Link>
                                     <li><hr className="dropdown-divider" /></li>
-                                    <Link to='/signup' className="dropdown-item">Sign Up</Link>
+                                    <Link to='/seller-signin' className="dropdown-item">Want To Sell</Link>
                                 </ul>
                             </li>}
 

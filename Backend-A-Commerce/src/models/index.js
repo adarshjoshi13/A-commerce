@@ -8,6 +8,7 @@ const sequelize = new Sequelize(process.env.PG_CONNECTION_URI, {
             rejectUnauthorized: true,
         },
     },
+    logging: false
 });
 
 const GetOtps = require('./getotps')(sequelize, Sequelize);

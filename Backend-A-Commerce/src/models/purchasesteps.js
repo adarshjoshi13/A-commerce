@@ -29,12 +29,13 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.TEXT,
             allowNull: false,
             validate: {
-              notEmpty: true,
-            },        
-          },        
+                notEmpty: true,
+            },
+        },
     }, {
         sequelize,
         tableName: 'purchase_steps',
+        logging: false,
         timestamps: false
     })
 }

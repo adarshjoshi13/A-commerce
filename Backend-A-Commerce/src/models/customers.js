@@ -60,6 +60,7 @@ module.exports = function (sequelize, DataTypes) {
         sequelize,
         tableName: 'customers',
         timestamps: true,
+        logging: false,
         updatedAt: false
     });
 }

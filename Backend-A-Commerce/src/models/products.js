@@ -43,9 +43,9 @@ module.exports = function (sequelize, DataTypes) {
          type: DataTypes.BIGINT,
          allowNull: false,
          validate: {
-           notEmpty: true
+            notEmpty: true
          }
-       },
+      },
       images: {
          type: DataTypes.ARRAY(DataTypes.STRING),
          allowNull: false,
@@ -56,6 +56,7 @@ module.exports = function (sequelize, DataTypes) {
    }, {
       sequelize,
       tableName: 'products',
+      logging: false,
       timestamps: true
    })
 }

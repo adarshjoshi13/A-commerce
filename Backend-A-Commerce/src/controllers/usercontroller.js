@@ -43,7 +43,7 @@ const Authentication = async (req, res) => {
 
 }
 
-const Register = async (req, res) => {
+const BuyerRegister = async (req, res) => {
     try {
 
         const UpdateUserVerification = await GetOtps.update(
@@ -94,7 +94,7 @@ const Register = async (req, res) => {
 
 }
 
-const Login = async (req, res) => {
+const BuyerLogin = async (req, res) => {
     try {
 
         let identifier = req.body.identifier;
@@ -156,6 +156,14 @@ const GetUserData = async (req, res) => {
     }
 }
 
+const SellerRegister = async (req, res) => {
+    try {
+
+    } catch (Err) {
+        console.log(Err)
+    }
+}
+
 // const VerifyUser = async (req, res) => {
 
 //     let token = req.body.token
@@ -192,4 +200,4 @@ const GetUserData = async (req, res) => {
 
 // }
 
-module.exports = { Authentication, Register, Login, GetUserData }
+module.exports = { Authentication, BuyerRegister, BuyerLogin, GetUserData, SellerRegister }
