@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useState } from "react"
 import { useEffect } from "react"
-import OrderedProduct from "../products/orderedProduct"
+import OrderedProduct from "../components/Products/orderedProduct"
 import Cookies from "js-cookie"
 
 export default function Orders() {

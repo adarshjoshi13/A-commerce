@@ -1,10 +1,10 @@
 import axios from "axios"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Cookies from "js-cookie"
 import { useState } from "react";
 
 export default function OrderedProduct(props) {
-
+const Navigate = useNavigate()
     const [userId, setUserId] = useState(Cookies.get('userId'));
 
     const RemoveFromWishlist = async (ProductId) => {
@@ -39,14 +39,17 @@ export default function OrderedProduct(props) {
                 <p>{props.productDescription}</p>
                 <h3>{props.price}</h3>
 
-                <div className="d-flex justify-content-between ">
+                <div className="d-flex justify-content-start ">
                     <button type="btn" className="btn-primary btn" onClick={() => {
                         const userConfirmed = window.confirm("Are you sure you want to cancel the order?");
                         if (userConfirmed) {
                             RemoveFromWishlist(props.id);
                         }
 
-                    }} >Cancel Poruduct</button>
+                    }} >Cancel Order</button>
+                    <button type="btn" className="btn-success btn mx-3" onClick={()=> {
+                        Navigate(`/track-order/${props.id}`)
+                    }}>TrackOrder</button>
                 </div>
             </div>
 

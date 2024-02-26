@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Product from '../products/product';
+import Product from '../components/Products/product';
 import { useParams } from 'react-router-dom';
 
 const AllProducts = () => {
@@ -38,8 +38,10 @@ const AllProducts = () => {
 
     return (
         <>
-            <div className='d-flex flex-row justify-content-evenly flex-wrap'>
-                {loading ? <p>loading...</p> : AllProducts}
+            <div className='container my-5'>
+                <div className='row my-5 d-flex flex-row justify-content-evenly flex-wrap'>
+                    {loading ? <p>loading...</p> : AllProducts}
+                </div>
             </div>
         </>
     );

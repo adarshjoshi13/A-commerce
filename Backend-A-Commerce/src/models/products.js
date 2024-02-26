@@ -40,12 +40,12 @@ module.exports = function (sequelize, DataTypes) {
          }
       },
       price: {
-         type: DataTypes.STRING,
+         type: DataTypes.BIGINT,
          allowNull: false,
          validate: {
-            notEmpty: true
+           notEmpty: true
          }
-      },
+       },
       images: {
          type: DataTypes.ARRAY(DataTypes.STRING),
          allowNull: false,

@@ -1,16 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 * {
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
 }
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
+p {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
 }
 
-.product-box {
-    border: 2px solid lightseagreen;
+h5 {
+    font-family: "Oswald", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 2px
 }
+
+/* Loading CSS */
 
 .loading-heading {
     margin: 0;
@@ -159,4 +171,251 @@ span {
 
 #results li:hover {
     background-color: #f0f0f0;
+}
+
+/* Category CSS */
+
+.category-link {
+    text-decoration: none;
+    margin: 15px;
+    color: inherit;
+    transition: transform 0.2s ease-in-out;
+}
+
+.category-link:hover {
+    transform: scale(1.1);
+}
+
+.category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.category-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.category-name {
+    margin-top: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Product CSS */
+
+.product-box {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+}
+
+.product-box:hover {
+    transform: translateY(-5px);
+}
+
+.product-image-container {
+    overflow: hidden;
+}
+
+.product-image {
+    width: 100%;
+    height: 150px;
+    /* Adjust the height based on your design preference */
+    object-fit: cover;
+}
+
+.product-details {
+    padding: 15px;
+}
+
+.product-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.product-description {
+    color: #555;
+}
+
+.product-price {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.product-link {
+    text-decoration: none;
+}
+
+/* SignUpPage CSS */
+
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8%;
+}
+
+.signup-form {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.signup-form h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.signup-form label {
+    font-weight: bold;
+}
+
+.signup-form button {
+    width: 100%;
+}
+
+/* Login CSS */
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-container h1 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-container form label {
+    font-weight: bold;
+}
+
+.login-container form input {
+    margin-bottom: 15px;
+}
+
+/* CartProduct CSS */
+
+.cart-product-box {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.cart-product-box:hover {
+    transform: translateY(-5px);
+}
+
+.cart-product-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.cart-product-description {
+    color: #555;
+}
+
+.cart-product-price {
+    font-weight: bold;
+    color: #007bff;
+}
+
+
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.cart-text-reset {
+    text-decoration: none;
+    color: inherit;
+}
+
+.cart-text-reset:hover {
+    text-decoration: underline;
+}
+
+/* WishlistProduct CSS */
+
+.wishlist-product-box {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.wishlist-product-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #212529;
+}
+
+.wishlist-product-description {
+    color: #495057;
+}
+
+.wishlist-product-price {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.btn-outline-danger {
+    color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.wishlist-text-reset {
+    text-decoration: none;
+    color: inherit;
+}
+
+.wishlist-text-reset:hover {
+    text-decoration: underline;
+}
+
+@media (min-width: 580px) {
+    #nav-container {
+        display: flex !important;
+        flex-wrap: inherit !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
 }

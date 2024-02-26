@@ -24,27 +24,25 @@ export default function Categories() {
     }, [])
 
 
-
-    const Categories =
-        categoriesData ?
-            (categoriesData.map((value, index) => {
-                return (
-                    <Link to={`/products/${value.id}`} key={value.id} className='my-3 mx-5 text-reset text-decoration-none'>
-                        <div id={value.id} className='d-flex flex-column justify-content-center align-items-center p-0'>
-                            <img className='img-fluid' src={`./public/${value.image}.png`} style={{ width: 100 }} />
-                            <h5 className='fw-bold text-center my-3'>{value.name.toUpperCase()}</h5>
-                        </div>
-                    </Link>
-                )
-            })) :
-            (null)
-
-
-
+    const Categories = categoriesData ? (
+        categoriesData.map((value) => (
+            <Link to={`/products/${value.id}`} key={value.id} className='category-link col-2'>
+                <div id={value.id} className='category-item card text-center'>
+                    <img className='category-image card-img-top img-fluid' src={`./${value.image}.png`} alt={`${value.name} Image`} />
+                    <div className='card-body'>
+                        <h5 className='card-title'>{value.name.toUpperCase()}</h5>
+                    </div>
+                </div>
+            </Link>
+        ))
+    ) : <p className='text-center'>loading...</p>;
 
     return (
-        <>
-            {Categories}
-        </>
-    )
+        <div className='container mt-5'>
+            <div className='row d-flex justify-content-center flex-row'>
+                {Categories}
+            </div>
+        </div>
+    );
+
 }

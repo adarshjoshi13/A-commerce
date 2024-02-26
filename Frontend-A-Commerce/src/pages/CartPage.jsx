@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import CartProduct from "../products/cartProduct";
+import CartProduct from "../components/Products/cartProduct";
 import Cookies from "js-cookie";
 
 export default function CartProducts() {
@@ -53,7 +53,7 @@ export default function CartProducts() {
     );
 
     return (
-        <div>
+        <div className="container my-5">
             {loader ? CartProducts : <p>loading...</p>}
         </div>
     );

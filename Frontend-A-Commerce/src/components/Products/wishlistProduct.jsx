@@ -27,21 +27,19 @@ export default function WishlistProduct(props) {
     }
 
     return (
-        <>
+        <div id={props.id} className="wishlist-product-box p-3 mb-3">
+            <Link to={`/product-page/${props.productName}/${props.id}`} className='wishlist-text-reset wishlist-text-decoration-none'>
+                <h2 className="wishlist-product-title">{props.productName}</h2>
+            </Link>
 
-            <div id={props.id} className="product-box p-3 d-flex flex-column justify-content-center align-content-center m-2 my-5">
-                <Link to={`/product-page/${props.id}`} className='text-reset text-decoration-none'>
-                    <h1 >{props.productName}</h1>
-                </Link>
+            <p className="wishlist-product-description">{props.productDescription}</p>
+            <h3 className="wishlist-product-price">₹{props.price}</h3>
 
-                <p>{props.productDescription}</p>
-                <h3>{props.price}</h3>
-
-                <div className="d-flex justify-content-between ">
-                    <button type="btn" className="btn-primary btn" onClick={() => { RemoveFromWishlist(props.id) }} >Delete</button>
-                </div>
+            <div className="d-flex justify-content-between align-items-center mt-3">
+                <button type="button" className="btn btn-outline-danger" onClick={() => { RemoveFromWishlist(props.id) }}>Remove</button>
             </div>
+        </div>
+    );
 
-        </>
-    )
+
 }

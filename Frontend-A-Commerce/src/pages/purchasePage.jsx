@@ -1,10 +1,12 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const PurchasePage = () => {
-    const userId = Cookies.get()
+    const Navigate = useNavigate()
+    const cookie = Cookies.get()
+
     const [purchaseForm, setPurchaseForm] = useState([]);
     const [stepNumber, setStepNumber] = useState(0);
     const formRef = useRef(null);
@@ -32,6 +34,10 @@ const PurchasePage = () => {
     };
 
     useEffect(() => {
+        if (!cookie.userId) {
+            Navigate('/login');
+        }
+
         getPurhcaseSteps();
     }, []);
 
