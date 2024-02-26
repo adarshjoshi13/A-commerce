@@ -377,9 +377,10 @@ const GetFilterProducts = async (req, res) => {
 
         const { Op } = require('sequelize');
 
-        const sortingOrder = FilterKeys.sort === '1' ? 'ASC' : 'DESC';
+        const sortingOrder = FilterKeys.sort === '0' ? 'ASC' : 'DESC';
 
         const ProductsInfo = await Products.findAll({
+            raw: true,
             where: {
                 name: {
                     [Op.iLike]: `%${FilterKeys.name}%`

@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useState } from "react"
 import { useEffect } from "react"
-import WishlistProduct from "../products/wishlistProduct"
+import WishlistProduct from "../components/Products/wishlistProduct"
 import Cookies from "js-cookie"
 
 export default function WishlistPage() {
@@ -63,7 +63,7 @@ export default function WishlistPage() {
 
     return (
 
-        <div>
+        <div className="container my-5">
             {loader ? WishlistProducts : <p>loading...</p>}
         </div>
     )

@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import Filter from '../components/filter'
-import SearchedProduct from '../products/searchedProduct';
+import SearchedProduct from '../components/Products/searchedProduct';
 
 const SearchResultPage = () => {
     const Params = useParams();
@@ -42,10 +42,10 @@ const SearchResultPage = () => {
     return (
         <div className='d-flex flex-row justify-content-between container'>
 
-            <div className='filter my-5 mx-4 col-2'>
+            <div className='filter my-5 mx-3 col-2'>
                 <Filter/>
             </div>
-            <div className='d-flex flex-row justify-content-evenly flex-wrap col-10 mx-4'>
+            <div className='mx-3 d-flex flex-row justify-content-evenly flex-wrap col-10'>
                 {loading ? <p>loading...</p> : SearchResults}
             </div>
 

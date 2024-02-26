@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import ShowProduct from '../products/showProduct';
+import ShowProduct from '../components/Products/showProduct';
 import { useEffect, useState } from 'react';
 // import Loader from '../components/loader'
 import axios from 'axios';

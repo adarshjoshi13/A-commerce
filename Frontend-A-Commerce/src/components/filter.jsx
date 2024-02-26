@@ -23,32 +23,35 @@ const Filter = () => {
 
     };
 
+    // Filter component
     return (
-        <form onSubmit={handleSubmit}>
-            <h2>Filter</h2>
-            <div className="mb-3">
-                <label htmlFor="sortBy" className="form-label">
-                    Sort By:
-                </label>
-                <select
-                    id="sortBy"
-                    name="sortBy"  // add name attribute for the handleChange function
-                    className="form-select"
-                    value={filters.sortBy}
-                    onChange={handleChange}
-                >
-                    <option value="price_low_to_high">Choose price</option>
-                    <option value="0">Price Low to High</option>
-                    <option value="1">Price High to Low</option>
-                </select>
-            </div>
+        <div className='border p-3'>
+            <form onSubmit={handleSubmit}>
+                <h2 className='mb-3'>Filter</h2>
+                <div className="mb-3">
+                    <label htmlFor="sortBy" className="form-label">
+                        Sort By:
+                    </label>
+                    <select
+                        id="sortBy"
+                        name="sortBy"  // add name attribute for the handleChange function
+                        className="form-select"
+                        value={filters.sortBy}
+                        onChange={handleChange}
+                    >
+                        <option value="price_low_to_high">Choose price</option>
+                        <option value="0">Price Low to High</option>
+                        <option value="1">Price High to Low</option>
+                    </select>
+                </div>
 
-            {/* Add more input fields with similar structures */}
+                {/* Add more input fields with similar structures */}
 
-            <button type="submit" className="btn btn-primary">
-                Apply Filters
-            </button>
-        </form>
+                <button type="submit" className="btn btn-success">
+                    Apply Filters
+                </button>
+            </form>
+        </div>
     );
 };
 

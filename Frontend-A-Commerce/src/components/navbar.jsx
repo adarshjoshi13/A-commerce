@@ -4,7 +4,6 @@ import SearchBar from './searchBar'
 export default function Navbar() {
     const storedToken = localStorage.getItem('token');
     const handleLogout = () => {
-        console.log("meow")
         Cookies.remove('userId');
         localStorage.clear();
         window.location.replace('/');
@@ -13,7 +12,7 @@ export default function Navbar() {
     return (
         <>
             <nav className="navbar navbar-expand-lg bg-body-tertiary">
-                <div className="container-fluid">
+                <div className="container-fluid" id="nav-container">
                     <Link to="/" className="navbar-brand fw-bold">HOME</Link>
                     <SearchBar/>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,7 +46,7 @@ export default function Navbar() {
                                 <ul className="dropdown-menu">
                                     <Link to='/my-orders' className="dropdown-item">My Orders</Link>
                                     <li><hr className="dropdown-divider" /></li>
-                                    <Link to='/signup' className="dropdown-item" onClick={handleLogout}>Log Out</Link>
+                                    <Link className="dropdown-item fw-bold" onClick={handleLogout}>Log Out <i className="bi bi-box-arrow-right fw-bold fs-5"></i></Link>
                                 </ul>
                             </li>
                             :

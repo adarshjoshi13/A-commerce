@@ -26,7 +26,7 @@ function App() {
           <Route path='/my-cart' element={<CartPage />} />
           <Route path='/my-wishlist' element={<WishlistPage />} />
           <Route path='/my-orders' element={<Orders />} />
-          <Route path='/product-purhchase/:productId' element={<PurchasePage />} />
+          <Route path='/product-purchase/:productId' element={<PurchasePage />} />
           <Route path='/search-results/:searchedKey' element={<SearchResultPage />} />
           <Route path='/filter-results/:searchedKey/:sort' element={<FilterResultPage />} />
         </Routes>

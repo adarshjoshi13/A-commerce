@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 export default function ShowProduct(props) {
     const [userWishlistData, setUserWishlistData] = useState([]);
     const [userId, setUserId] = useState(Cookies.get('userId'));
-    const [loading, setLoading] = useState(false);
 
     const Naviagte = useNavigate()
 
@@ -92,40 +91,57 @@ export default function ShowProduct(props) {
 
 
     return (
-        <>
-            {loading ?
-                (
-                    <div id={props.id} className="product-box p-3 d-flex flex-column justify-content-center align-content-center m-2 my-5">
-                        <h1>{props.productName}</h1>
-                        <p>{props.productDescription}</p>
-                        <p className="fs-4 fw-bold">₹{props.price}</p>
-
-                        <div className="d-flex justify-content-between align-items-center">
-                            <Link to={`/product-purhchase/${props.id}`}><button type="btn" className="btn-primary btn">Buy Now</button></Link>
-
-                            <div className="d-flex justify-content-between">
-                                <button type="btn" className="btn-primary btn mx-3" onClick={() => { AddCart(props.id) }}>Add To cart</button>
-                                {
-                                    userWishlistData.includes(props.id) ?
-                                        <i className="fs-3 m-0 p-0 bi bi-heart-fill" role="button" onClick={() => { RemoveFromWishlist(props.id) }}></i> :
-                                        <i className="fs-3 m-0 p-0 bi bi-heart" role="button" onClick={
-                                            () => {
-                                                if (userId) {
-                                                    AddWishlist(props.id)
-                                                } else {
-                                                    Naviagte('/login')
-                                                }
-                                            }
-                                        }></i>
+        <div id={props.id} className="container my-5">
+            
+            <div className="row">
+                <div className="col-md-6">
+                    <img src={`./public/${props.id}.png`} className="img-fluid" alt={`${props.productName} Image`} />
+                </div>
+                <div className="col-md-6">
+                    <h1 className="display-4">{props.productName}</h1>
+                    <p className="lead">{props.productDescription}</p>
+                    <p className="display-5 fw-bold">₹{props.price}</p>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <Link to={`/product-purchase/${props.id}`}>
+                            <button type="button" className="btn btn-primary">Buy Now</button>
+                        </Link>
+                        <div className="d-flex justify-content-between">
+                            <button type="button" className="btn btn-primary mx-3" onClick={() => {
+                                if (userId) {
+                                    AddCart(props.id);
+                                } else {
+                                    Naviagte('/login');
                                 }
-                            </div>
+                            }} >
+                                Add To Cart
+                            </button>
+                            {userWishlistData.includes(props.id) ? (
+                                <i
+                                    className="fs-3 m-0 p-0 bi bi-heart-fill"
+                                    role="button"
+                                    onClick={() => {
+                                        RemoveFromWishlist(props.id);
+                                    }}
+                                ></i>
+                            ) : (
+                                <i
+                                    className="fs-3 m-0 p-0 bi bi-heart"
+                                    role="button"
+                                    onClick={() => {
+                                        if (userId) {
+                                            AddWishlist(props.id);
+                                        } else {
+                                            Naviagte('/login');
+                                        }
+                                    }}
+                                ></i>
+                            )}
                         </div>
                     </div>
-                ) :
-                (
-                    <p>LOADING...</p>
-                )}
-
-        </>
+                </div>
+            </div>
+            
+        </div>
     );
+
 }
