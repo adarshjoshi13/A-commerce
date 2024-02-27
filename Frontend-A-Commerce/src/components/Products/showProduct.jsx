@@ -6,14 +6,14 @@ import { useNavigate } from 'react-router-dom';
 
 export default function ShowProduct(props) {
     const [userWishlistData, setUserWishlistData] = useState([]);
-    const [userId, setUserId] = useState(Cookies.get('userId'));
-
+    const cookies = Cookies.get();
+    const BuyerId = cookies.BuyerId;
     const Naviagte = useNavigate()
 
     const GetUserData = async () => {
         try {
-            const userData = await axios.get(`http://localhost:3000/get-user-data/${userId}`);
-            if (userId) {
+            const userData = await axios.get(`http://localhost:3000/get-user-data/${BuyerId}`);
+            if (BuyerId) {
                 setUserWishlistData(userData.data.data.inWishlist);
             }
         } catch (error) {
@@ -26,7 +26,7 @@ export default function ShowProduct(props) {
     }
 
     useEffect(() => {
-        if (userId) {
+        if (BuyerId) {
             GetUserData();
         }
 
@@ -34,7 +34,7 @@ export default function ShowProduct(props) {
 
     const AddCart = async (id) => {
         try {
-            const UpdateUserCart = await axios.post('http://localhost:3000/add-cart', { productId: id, userId }, {
+            const UpdateUserCart = await axios.post('http://localhost:3000/add-to-cart', { productId: id, BuyerId }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -49,11 +49,8 @@ export default function ShowProduct(props) {
 
     const AddWishlist = async (id) => {
 
-        if (!userId) {
-
-        }
         try {
-            const UpdateUserWishlist = await axios.post('http://localhost:3000/add-wishlist', { productId: id, userId }, {
+            const UpdateUserWishlist = await axios.post('http://localhost:3000/add-wishlist', { productId: id, BuyerId }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -72,7 +69,7 @@ export default function ShowProduct(props) {
     const RemoveFromWishlist = async (ProductId) => {
         let productId = ProductId
         try {
-            const RemoveWishlist = await axios.post('http://localhost:3000/remove-from-wishlist', { userId, productId }, {
+            const RemoveWishlist = await axios.post('http://localhost:3000/remove-from-wishlist', { BuyerId, productId }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -106,10 +103,10 @@ export default function ShowProduct(props) {
                         </Link>
                         <div className="d-flex justify-content-between">
                             <button type="button" className="btn btn-primary mx-3" onClick={() => {
-                                if (userId) {
+                                if (BuyerId) {
                                     AddCart(props.id);
                                 } else {
-                                    Naviagte('/login');
+                                    Naviagte('/buyer-signin');
                                 }
                             }} >
                                 Add To Cart
@@ -127,10 +124,10 @@ export default function ShowProduct(props) {
                                     className="fs-3 m-0 p-0 bi bi-heart"
                                     role="button"
                                     onClick={() => {
-                                        if (userId) {
+                                        if (BuyerId) {
                                             AddWishlist(props.id);
                                         } else {
-                                            Naviagte('/login');
+                                            Naviagte('/buyer-signin');
                                         }
                                     }}
                                 ></i>

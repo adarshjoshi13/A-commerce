@@ -6,14 +6,12 @@ import SearchedProduct from '../components/Products/searchedProduct';
 
 const FilterResultPage = () => {
     const FilterKeys = useParams();
-    console.log(FilterKeys)
     const [productsData, setProductsData] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const fetchData = async () => {
         try {
             const response = await axios.get(`http://localhost:3000/get-filter-products/?name=${FilterKeys.searchedKey}&sort=${FilterKeys.sort}`);
-            console.log(response)
             if (response.data) {
                 setProductsData(response.data.data);
                 setLoading(false)

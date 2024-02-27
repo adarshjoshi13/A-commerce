@@ -26,7 +26,7 @@ app.get('/get-user-data/:userId', usercontroller.GetUserData);
 // app.post('/verify-user', usercontroller.VerifyUser);
 app.get('/get-products/:catId', homecontroller.GetProductData);
 app.get('/get-product/:id', homecontroller.GetProduct);
-app.post('/add-cart', homecontroller.AddCart);
+app.post('/add-to-cart', homecontroller.AddCart);
 app.get('/get-user-cart/:userId', homecontroller.GetUserCart);
 app.post('/remove-from-cart', homecontroller.RemoveFromCart);
 app.post('/add-wishlist', homecontroller.AddWishlist);

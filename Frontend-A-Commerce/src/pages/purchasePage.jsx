@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const PurchasePage = () => {
     const Navigate = useNavigate()
     const cookie = Cookies.get()
+    const BuyerId = cookie.BuyerId
 
     const [purchaseForm, setPurchaseForm] = useState([]);
     const [stepNumber, setStepNumber] = useState(0);
@@ -34,8 +35,8 @@ const PurchasePage = () => {
     };
 
     useEffect(() => {
-        if (!cookie.userId) {
-            Navigate('/login');
+        if (!BuyerId) {
+            Navigate('/buyer-signin');
         }
 
         getPurhcaseSteps();

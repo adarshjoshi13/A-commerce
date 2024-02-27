@@ -12,19 +12,19 @@ const ProductPage = () => {
 
     const Params = useParams();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(`http://localhost:3000/get-product/${Params.id}`);
+    const fetchData = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3000/get-product/${Params.id}`);
 
-                if (response.data.productData) {
-                    setProductData(response.data.productData);
-                }
-                setLoading(false);
-            } catch (err) {
-                console.error("Error Found: ", err);
+            if (response.data.productData) {
+                setProductData(response.data.productData);
             }
-        };
+            setLoading(false);
+        } catch (err) {
+            console.error("Error Found: ", err);
+        }
+    };
+    useEffect(() => {
 
         fetchData();
     }, []);

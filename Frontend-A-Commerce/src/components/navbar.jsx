@@ -2,9 +2,12 @@ import Cookies from 'js-cookie';
 import { Link } from 'react-router-dom';
 import SearchBar from './searchBar'
 export default function Navbar() {
-    const storedToken = localStorage.getItem('token');
+    // const storedToken = localStorage.getItem('token');
+    const cookies = Cookies.get()
+    const BuyerId = cookies.BuyerId
+
     const handleLogout = () => {
-        Cookies.remove('userId');
+        Cookies.remove('BuyerId');
         localStorage.clear();
         window.location.replace('/');
     }
@@ -25,20 +28,25 @@ export default function Navbar() {
 
                         <div className='mx-3 d-flex justify-content-center align-items-center flex-nowrap'>
 
-                            <li className='list-unstyled mx-2'>
-                                <Link to="/my-cart" ><i className="bi bi-cart-fill text-black fs-4"></i></Link>
-                            </li>
 
-                            {storedToken ?
-                                <li className='list-unstyled mx-2 '>
-                                    <Link to="/my-wishlist"><i className="bi bi-heart-fill text-black fs-4"></i></Link>
-                                </li>
+                            {BuyerId ?
+                                (
+                                    <>
+                                        <li className='list-unstyled mx-2'>
+                                            <Link to="/my-cart" ><i className="bi bi-cart-fill text-black fs-4"></i></Link>
+                                        </li>
+
+                                        <li className='list-unstyled mx-2 '>
+                                            <Link to="/my-wishlist"><i className="bi bi-heart-fill text-black fs-4"></i></Link>
+                                        </li>
+                                    </>
+                                )
                                 :
                                 null}
 
                         </div>
 
-                        {storedToken ?
+                        {BuyerId ?
                             <li className="nav-item dropdown list-unstyled mx-2">
                                 <a className="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     My Profile

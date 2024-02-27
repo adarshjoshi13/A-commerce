@@ -31,10 +31,11 @@ export default function BuyerSignIn() {
                 withCredentials: true,
             })
             if (response) {
-                let userId = response.data.data.userData.id
+                let BuyerId = response.data.data.userData.id
                 let token = response.data.data.userToken
                 localStorage.setItem('token', token);
-                Cookies.set('userId', userId, { secure: true, expires: 7, sameSite: 'Strict' });
+                console.log(BuyerId)
+                Cookies.set('BuyerId', BuyerId, { secure: true, expires: 7, sameSite: 'Strict' });
                 window.location.replace('/');
 
             }

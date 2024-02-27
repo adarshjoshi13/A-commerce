@@ -1,5 +1,5 @@
 
-const { Customers, Products, Categories, PurchaseSteps, Orders } = require('../models/index')
+const { Buyers, Products, Categories, PurchaseSteps, Orders } = require('../models/index')
 const { sequelize } = require('../models/index');
 const products = require('../models/products');
 require('dotenv').config();
@@ -51,10 +51,9 @@ const GetProduct = async (req, res) => {
 const AddCart = async (req, res) => {
 
     try {
-
-        const updateUserData = await Customers.update(
+        const updateUserData = await Buyers.update(
             { inCart: sequelize.literal(`array_append("inCart", ${req.body.productId})`), },
-            { where: { id: req.body.userId } }
+            { where: { id: req.body.BuyerId } }
         );
 
         if (updateUserData) {
@@ -74,7 +73,7 @@ const GetUserCart = async (req, res) => {
     try {
         const userId = req.params.userId
 
-        const userInfo = await Customers.findOne({
+        const userInfo = await Buyers.findOne({
             where: { id: userId }
         })
 
@@ -100,7 +99,7 @@ const RemoveFromCart = async (req, res) => {
         let ProductId = req.body.productId
         let UserId = req.body.userId
 
-        const updatedCustomer = await Customers.update(
+        const updatedCustomer = await Buyers.update(
             { inCart: sequelize.literal(`array_remove("inCart", ${ProductId})`) },
             { where: { id: UserId } }
         );
@@ -120,7 +119,7 @@ const RemoveFromCart = async (req, res) => {
 const AddWishlist = async (req, res) => {
     try {
 
-        const updateUserData = await Customers.update(
+        const updateUserData = await Buyers.update(
             {
                 inWishlist: sequelize.literal(`array_append("inWishlist", ${req.body.productId})`),
             },
@@ -145,7 +144,7 @@ const GetUserWishlist = async (req, res) => {
 
     try {
         const userId = req.params.userId
-        const userInfo = await Customers.findOne({
+        const userInfo = await Buyers.findOne({
             where: { id: userId }
         })
 
@@ -174,7 +173,7 @@ const RemoveFromWishlist = async (req, res) => {
         let ProductId = req.body.productId
         let UserId = req.body.userId
 
-        const updatedCustomer = await Customers.update(
+        const updatedCustomer = await Buyers.update(
             { inWishlist: sequelize.literal(`array_remove("inWishlist", ${ProductId})`) },
             { where: { id: UserId } }
         );
@@ -241,7 +240,7 @@ const ListProductOrder = async (req, res) => {
             orderBy: ProductInfo.userId
         })
 
-        const updateUserData = await Customers.update(
+        const updateUserData = await Buyers.update(
             { orders: sequelize.literal(`array_append("orders", ${ProductInfo.productId})`), },
             { where: { id: ProductInfo.userId } }
         );
@@ -260,7 +259,7 @@ const ListProductOrder = async (req, res) => {
 const GetUserOrders = async (req, res) => {
     try {
         const userId = req.params.userId
-        const userInfo = await Customers.findOne({
+        const userInfo = await Buyers.findOne({
             where: { id: userId }
         })
 
@@ -288,7 +287,7 @@ const CancelOrder = async (req, res) => {
         let ProductId = req.body.productId
         let UserId = req.body.userId
 
-        const updatedCustomer = await Customers.update(
+        const updatedCustomer = await Buyers.update(
             { orders: sequelize.literal(`array_remove("orders", ${ProductId})`) },
             { where: { id: UserId } }
         );

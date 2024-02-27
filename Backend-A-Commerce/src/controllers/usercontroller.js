@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { GetOtps, Customers } = require('../models/index')
+const { GetOtps, Buyers } = require('../models/index')
 const { sequelize } = require('../models/index');
 require('dotenv').config();
 
@@ -54,7 +54,7 @@ const BuyerRegister = async (req, res) => {
         if (UpdateUserVerification) {
             const Password = await bcrypt.hash(req.body.password, 10);
 
-            const RegisterCustomer = await Customers.create({
+            const RegisterCustomer = await Buyers.create({
                 full_name: req.body.name,
                 mobile: req.body.number,
                 email: req.body.email,
@@ -64,7 +64,7 @@ const BuyerRegister = async (req, res) => {
 
             if (RegisterCustomer) {
 
-                const User = await Customers.findOne({
+                const User = await Buyers.findOne({
                     where: { mobile: req.body.number }
                 })
 
@@ -107,7 +107,7 @@ const BuyerLogin = async (req, res) => {
             }
         }
 
-        const user = await Customers.findOne({
+        const user = await Buyers.findOne({
             where: isEmail ? { email: identifier } : { mobile: identifier }
         });
 
@@ -140,7 +140,7 @@ const GetUserData = async (req, res) => {
     try {
         let userId = req.params.userId
 
-        const getUserData = await Customers.findOne({
+        const getUserData = await Buyers.findOne({
             where: { id: userId }
         })
 
@@ -184,7 +184,7 @@ const SellerRegister = async (req, res) => {
 
 //     }
 
-//     const CustomerInfo = await Customers.findOne({
+//     const CustomerInfo = await Buyers.findOne({
 //         where: isEmail ?
 //             { email: Identifier } : { mobile: Identifier }
 //     })

@@ -1,7 +1,7 @@
 const sequelize = require('sequelize')
 
 module.exports = function (sequelize, DataTypes) {
-    return sequelize.define('customers', {
+    return sequelize.define('buyers', {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -58,7 +58,7 @@ module.exports = function (sequelize, DataTypes) {
         }
     }, {
         sequelize,
-        tableName: 'customers',
+        tableName: 'buyers',
         timestamps: true,
         logging: false,
         updatedAt: false
