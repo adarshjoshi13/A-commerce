@@ -19,8 +19,9 @@ app.use(cors({
 Connection()
 
 app.post('/authentication', usercontroller.Authentication);
-app.post('/register', usercontroller.Register);
-app.post('/login', usercontroller.Login);
+app.post('/buyer-sign-up', usercontroller.BuyerRegister);
+app.post('/buyer-sign-in', usercontroller.BuyerLogin);
+app.post('/seller-registration', usercontroller.SellerRegister);
 app.get('/get-user-data/:userId', usercontroller.GetUserData);
 // app.post('/verify-user', usercontroller.VerifyUser);
 app.get('/get-products/:catId', homecontroller.GetProductData);

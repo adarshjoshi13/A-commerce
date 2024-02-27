@@ -44,6 +44,7 @@ module.exports = function (sequelize, DataTypes) {
     }, {
         sequelize,
         tableName: 'getotps',
+        logging: false,
         timestamps: true,
     });
 }

@@ -15,7 +15,6 @@ export default function ShowProduct(props) {
             const userData = await axios.get(`http://localhost:3000/get-user-data/${userId}`);
             if (userId) {
                 setUserWishlistData(userData.data.data.inWishlist);
-                setLoading(true);
             }
         } catch (error) {
             console.error('Error fetching user data:', error);
@@ -92,7 +91,7 @@ export default function ShowProduct(props) {
 
     return (
         <div id={props.id} className="container my-5">
-            
+
             <div className="row">
                 <div className="col-md-6">
                     <img src={`./public/${props.id}.png`} className="img-fluid" alt={`${props.productName} Image`} />
@@ -140,7 +139,7 @@ export default function ShowProduct(props) {
                     </div>
                 </div>
             </div>
-            
+
         </div>
     );
 

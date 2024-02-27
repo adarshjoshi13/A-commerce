@@ -35,6 +35,7 @@ module.exports = function (sequelize, DataTypes) {
     }, {
         sequelize,
         tableName: 'orders',
+        logging: false,
         timestamps: true,
         updatedAt: false
     })
