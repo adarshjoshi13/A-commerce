@@ -25,6 +25,13 @@ module.exports = function (sequelize, DataTypes) {
             notEmpty: true
          }
       },
+      sellBy: {
+         type: DataTypes.INTEGER(),
+         allowNull: false,
+         validate: {
+            notEmpty: true
+         }
+      },
       name: {
          type: DataTypes.STRING(50),
          allowNull: false,
@@ -56,7 +63,6 @@ module.exports = function (sequelize, DataTypes) {
    }, {
       sequelize,
       tableName: 'products',
-      logging: false,
       timestamps: true
    })
 }

@@ -4,8 +4,6 @@ import Categories from '../components/categories';
 
 const HomePage = () => {
 
-
-
     return (
         <>
             <div className='container root d-flex justify-content-center flex-wrap my-4'>

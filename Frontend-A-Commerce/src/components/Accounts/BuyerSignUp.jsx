@@ -6,7 +6,8 @@ import { Link, useNavigate } from 'react-router-dom';
 
 export default function BuyerSignUp() {
   const Navigate = useNavigate()
-  const [alert, setAlert] = useState()
+  const [errorMsg, setErrorMsg] = useState()
+  const [showAlert, setShowAlert] = useState();
   const [ApplicantData, setApplicantData] = useState({})
   const [FormVisbile, setFormVisbile] = useState(true)
   const [formData, setFormData] = useState({
@@ -30,7 +31,6 @@ export default function BuyerSignUp() {
 
   }
 
-
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prevData) => ({
@@ -48,7 +48,7 @@ export default function BuyerSignUp() {
         if (formData.password !== formData.Cpassword) {
           throw "Password Mismatch"
         } else {
-          const response = await axios.post("http://localhost:3000/authentication", formData, {
+          const response = await axios.post("http://localhost:3000/buyer-authentication", formData, {
             headers: {
               "Content-Type": "application/json"
             }
@@ -61,13 +61,25 @@ export default function BuyerSignUp() {
 
     } catch (error) {
       e.preventDefault()
-      setAlert(error)
+      setShowAlert(true)
+      setErrorMsg(error)
     }
+  };
+
+  const handleAlertClose = () => {
+    setShowAlert(false);
   };
 
   return (
     <>
-      <Alert message={alert} />
+      {showAlert && (
+        <Alert
+          message={errorMsg}
+          type="danger"
+          onClose={handleAlertClose}
+        />
+      )}
+
 
       {FormVisbile ? (
         <div className='d-flex justify-content-center align-items-center my-5'>

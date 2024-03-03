@@ -4,22 +4,23 @@ import Cookies from "js-cookie"
 import { useState } from "react";
 
 export default function OrderedProduct(props) {
-const Navigate = useNavigate()
-    const [userId, setUserId] = useState(Cookies.get('userId'));
+    const Navigate = useNavigate()
+    const cookies = Cookies.get();
+    const BuyerId = cookies.BuyerId
 
-    const RemoveFromWishlist = async (ProductId) => {
+    const CancelOrder = async (ProductId) => {
 
 
         let productId = ProductId
         try {
-            const RemoveWishlist = await axios.post('http://localhost:3000/cancel-order', { userId, productId }, {
+            const RemoveWishlist = await axios.post('http://localhost:3000/cancel-order', { BuyerId, productId }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
 
             if (RemoveWishlist) {
-                console.log("product cancelled successfully")
+                console.log("product order cancelled successfully")
                 props.refresh()
             }
         } catch (ERR) {
@@ -43,11 +44,11 @@ const Navigate = useNavigate()
                     <button type="btn" className="btn-primary btn" onClick={() => {
                         const userConfirmed = window.confirm("Are you sure you want to cancel the order?");
                         if (userConfirmed) {
-                            RemoveFromWishlist(props.id);
+                            CancelOrder(props.id);
                         }
 
                     }} >Cancel Order</button>
-                    <button type="btn" className="btn-success btn mx-3" onClick={()=> {
+                    <button type="btn" className="btn-success btn mx-3" onClick={() => {
                         Navigate(`/track-order/${props.id}`)
                     }}>TrackOrder</button>
                 </div>

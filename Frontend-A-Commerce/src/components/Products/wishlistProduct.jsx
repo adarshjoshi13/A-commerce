@@ -5,12 +5,14 @@ import { useState } from "react";
 
 export default function WishlistProduct(props) {
 
-    const [userId, setUserId] = useState(Cookies.get('userId'));
+    const cookies = Cookies.get()
+    const BuyerId = cookies.BuyerId
+
 
     const RemoveFromWishlist = async (ProductId) => {
         let productId = ProductId
         try {
-            const RemoveWishlist = await axios.post('http://localhost:3000/remove-from-wishlist', { userId, productId }, {
+            const RemoveWishlist = await axios.post('http://localhost:3000/remove-from-wishlist', { BuyerId, productId }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }

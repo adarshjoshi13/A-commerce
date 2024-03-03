@@ -2,34 +2,43 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Product from '../components/Products/product';
 import { useParams } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const AllProducts = () => {
     const Params = useParams()
-
+    const cookies = Cookies.get()
+    const SellerId = cookies.SellerId
     const [productData, setProductData] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(`http://localhost:3000/get-products/${Params.catId}`);
+    const fetchData = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3000/get-products/${Params.catId}`);
 
-                if (response.data) {
-                    setProductData(response.data.ProductsData);
-                    setLoading(false);
-                }
-            } catch (err) {
-                console.error("Error Found: ", err);
+            if (response.data) {
+                setProductData(response.data.ProductsData);
+                setLoading(false);
             }
-        };
+        } catch (err) {
+            console.error("Error Found: ", err);
+        }
+    };
+
+    useEffect(() => {
+        if(SellerId){
+            console.log(SellerId)
+        }
 
         fetchData();
-    }, [])
 
+
+    }, [])
+console.log()
     const AllProducts = productData.map((value, index) => (
         <Product
             key={index}
             id={value.id}
+            img={value.images[0]}
             productName={value.name}
             productDescription={value.description}
             price={value.price}

@@ -1,7 +1,7 @@
-const { sequelize } = require('sequelize')
+const sequelize = require('sequelize')
 
 module.exports = function (sequelize, DataTypes) {
-    return sequelize.define('getotps', {
+    return sequelize.define('sellers', {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -11,15 +11,24 @@ module.exports = function (sequelize, DataTypes) {
                 notEmpty: true
             }
         },
-        mobile: {
-            type: DataTypes.BIGINT,
+        full_name: {
+            type: DataTypes.STRING(100),
             allowNull: false,
             validate: {
                 notEmpty: true
             }
         },
-        generate_otp: {
-            type: DataTypes.STRING(6),
+        email: {
+            type: DataTypes.STRING(100),
+            allowNull: false,
+            unique: true,
+            validate: {
+                notEmpty: true,
+                isEmail: true
+            }
+        },
+        password: {
+            type: DataTypes.STRING(100),
             allowNull: false,
             validate: {
                 notEmpty: true
@@ -33,17 +42,21 @@ module.exports = function (sequelize, DataTypes) {
                 notEmpty: true
             }
         },
-        of_user: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 0,
-            validate: {
-                notEmpty: true
-            }
+        products: {
+            type: DataTypes.ARRAY(DataTypes.INTEGER),
+            allowNull: true,
+            defaultValue: []
+        },
+        orders: {
+            type: DataTypes.ARRAY(DataTypes.INTEGER),
+            allowNull: true,
+            defaultValue: []
         }
     }, {
         sequelize,
-        tableName: 'getotps',
+        tableName: 'sellers',
         timestamps: true,
+        updatedAt: false
     });
 }
+

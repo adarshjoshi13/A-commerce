@@ -6,28 +6,29 @@ import Cookies from "js-cookie";
 export default function CartProducts() {
     const [userCartSelectedProducts, setUserCartSelectedProducts] = useState([]);
     const [loader, setLoader] = useState(false);
-    const [userId, setUserId] = useState(Cookies.get('userId'));
+    const cookies = Cookies.get();
+    const BuyerId = cookies.BuyerId
 
     const getUserCartData = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/get-user-cart/${userId}`);
-
+            const response = await axios.get(`http://localhost:3000/get-user-cart/${BuyerId}`);
+            
             if (response && response.data) {
                 setUserCartSelectedProducts(response.data.data);
                 setLoader(true);
-            }
+            }   
         } catch (error) {
-            console.error('Error fetching user cart data:', error);
+            console.error('Error while fetching user cart data:', error);
         }
     };
 
     useEffect(() => {
-        if (userId) {
+        if (BuyerId) {
             getUserCartData();
         } else {
             setLoader(true);
         }
-    }, [userId]);
+    }, [BuyerId]);
 
     const refreshCartData = async () => {
         // Fetch cart data again when this function is called
@@ -47,8 +48,7 @@ export default function CartProducts() {
         ))
     ) : (
         <>
-            <h3 className="text-center fw-bold my-4">YOUR CART IS EMPTY</h3>
-            {userId ? null : <h4 className="fw-bold text-center">Please Sign In To Fill</h4>}
+            <h3 className="text-center fw-bold my-4">WHY YOUR CART IS EMPTY ?</h3>
         </>
     );
 

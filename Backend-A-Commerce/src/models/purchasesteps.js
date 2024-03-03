@@ -35,7 +35,6 @@ module.exports = function (sequelize, DataTypes) {
     }, {
         sequelize,
         tableName: 'purchase_steps',
-        logging: false,
         timestamps: false
     })
 }

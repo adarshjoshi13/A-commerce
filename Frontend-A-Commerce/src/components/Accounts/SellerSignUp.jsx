@@ -1,29 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Alert from '../alert'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-export default function SellerSignUp() {
+export default function BuyerSignUp() {
     const Navigate = useNavigate()
-    const [alert, setAlert] = useState()
-    const [ApplicantData, setApplicantData] = useState({})
-    const [FormVisbile, setFormVisbile] = useState(true)
+    const [Msg, setMsg] = useState()
+    const [showAlert, setShowAlert] = useState();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         password: '',
         Cpassword: '',
     });
-
-    const Register = async (otp) => {
-
-        const response = await axios.post('http://localhost:3000/seller-sign-up', { ...formData, OTP: otp }, {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        Navigate('/seller-signin')
-    }
 
 
     const handleChange = (e) => {
@@ -37,34 +26,41 @@ export default function SellerSignUp() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            if (formData.number.length !== 10) {
-                throw "Invalid Number"
-            } else {
-                if (formData.password !== formData.Cpassword) {
-                    throw "Password Mismatch"
-                } else {
-                    const response = await axios.post("http://localhost:3000/seller-registration", formData, {
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
-                    });
 
-                    setApplicantData(response.data)
-                    setFormVisbile(false)
-                }
+            if (formData.password !== formData.Cpassword) {
+                throw "Password Mismatch"
+            } else {
+                const response = await axios.post('http://localhost:3000/seller-sign-up ', { ...formData }, {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                setShowAlert(true)
+                setMsg(response.data.msg)
             }
+
 
         } catch (error) {
             e.preventDefault()
-            setAlert(error)
+            setShowAlert(true)
+            setMsg(error)
         }
+    };
+
+    const handleAlertClose = () => {
+        setShowAlert(false);
     };
 
     return (
         <>
-            <Alert message={alert} />
+            {showAlert && (
+                <Alert
+                    message={Msg}
+                    type="danger"
+                    onClose={handleAlertClose}
+                />
+            )}
 
-            (
             <div className='d-flex justify-content-center align-items-center my-5'>
                 <div className="signup-container ">
                     <div className="signup-form">
@@ -86,12 +82,21 @@ export default function SellerSignUp() {
                                 <label htmlFor="Cpassword" className="form-label fw-bold">Confirm Password</label>
                                 <input type="password" className="form-control" id="Cpassword" onChange={handleChange} required />
                             </div>
-                            <button type="submit" className="btn btn-primary">Craete Account</button>
+                            <button type="submit" className="btn btn-primary">Create Account</button>
                         </form>
                     </div>
+
+                    <div className='already-have-account mt-3'>
+                        <p className='text-center text-black'>Already A Seller Here?
+                            <Link to={'/seller-signin'}>
+                                Sign In
+                            </Link>
+                        </p>
+                    </div>
+
                 </div>
             </div>
-            )
+
         </>
     );
 

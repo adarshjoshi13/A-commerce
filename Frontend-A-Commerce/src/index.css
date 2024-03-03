@@ -341,3 +341,104 @@ h3 {
         justify-content: center !important;
     }
 }
+
+/* Alert CSS */
+
+.alert-container {
+    position: fixed;
+    border-radius: 5px;
+    left: -100%;
+    /* Initially position off-screen to the left */
+    top: 0;
+    width: 300px;
+    padding: 16px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.5s forwards, fadeOut 0.5s 2.5s forwards;
+    /* Slide in and fade out animations */
+}
+
+.alert-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bi-x-lg {
+    cursor: pointer;
+}
+
+/* Define the slide-in animation */
+@keyframes slideIn {
+    from {
+        left: -100%;
+    }
+
+    to {
+        left: 0;
+    }
+}
+
+/* Define the fade-out animation */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+/* Dashboard CSS */
+
+/* Custom Styles for Sidebar */
+.sidebar {
+    min-height: 100vh;
+    padding: 20px;
+    color: white;
+}
+
+.sidebar h1 {
+    font-size: 1.5rem;
+}
+
+.sidebar ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+.sidebar li {
+    padding: 10px 0;
+    font-size: 1.2rem;
+}
+
+/* Custom Styles for AddProduct */
+.controller {
+    background-color: #f8f9fa;
+    border-left: 1px solid #dee2e6;
+}
+
+.controller h1 {
+    font-size: 2rem;
+}
+
+.bi-plus-square {
+    cursor: pointer;
+}
+
+.image-container {
+    height: 300px;
+    overflow: hidden;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* or 'contain' based on your preference */
+}
+
+/* .show-product-img{
+    height: 500px;
+    width: 60%;
+} */
