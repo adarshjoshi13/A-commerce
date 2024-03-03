@@ -21,7 +21,7 @@ module.exports = function (sequelize, DataTypes) {
         mobile: {
             type: DataTypes.BIGINT,
             allowNull: false,
-            // unique: true,
+            unique: true,
             validate: {
                 notEmpty: true
             }
@@ -60,7 +60,6 @@ module.exports = function (sequelize, DataTypes) {
         sequelize,
         tableName: 'buyers',
         timestamps: true,
-        logging: false,
         updatedAt: false
     });
 }

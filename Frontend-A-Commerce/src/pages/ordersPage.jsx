@@ -4,15 +4,16 @@ import { useEffect } from "react"
 import OrderedProduct from "../components/Products/orderedProduct"
 import Cookies from "js-cookie"
 
-export default function Orders() {
+export default function MyOrders() {
 
     const [userOrderedProducts, setUserOrderedProducts] = useState([])
     const [loader, setLoader] = useState(false)
-    const [userId, setUserId] = useState(Cookies.get('userId'))
+    const cookie = Cookies.get()
+    const BuyerId = cookie.BuyerId
 
     const GetUserOrdersData = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/get-user-orders/${userId}`);
+            const response = await axios.get(`http://localhost:3000/get-user-orders/${BuyerId}`);
 
             if (response && response.data) {
                 setUserOrderedProducts(response.data.data);
@@ -26,13 +27,13 @@ export default function Orders() {
     }
 
     useEffect(() => {
-        if (userId) {
+        if (BuyerId) {
             GetUserOrdersData()
         } else {
             setLoader(true);
         }
 
-    }, [userId])
+    }, [BuyerId])
 
     const refreshPage = () => {
         GetUserOrdersData()

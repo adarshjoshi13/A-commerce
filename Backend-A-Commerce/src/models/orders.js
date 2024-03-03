@@ -25,7 +25,14 @@ module.exports = function (sequelize, DataTypes) {
                 notEmpty: true
             }
         },
-        orderBy: {
+        orderedBy: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
+        },
+        SellBy: {
             type: DataTypes.INTEGER,
             allowNull: false,
             validate: {
@@ -35,7 +42,6 @@ module.exports = function (sequelize, DataTypes) {
     }, {
         sequelize,
         tableName: 'orders',
-        logging: false,
         timestamps: true,
         updatedAt: false
     })

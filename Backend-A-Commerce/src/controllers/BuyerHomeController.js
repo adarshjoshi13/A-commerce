@@ -1,7 +1,7 @@
 
-const { Buyers, Products, Categories, PurchaseSteps, Orders } = require('../models/index')
+const { Buyers, Products, Categories, PurchaseSteps, Orders, Sellers } = require('../models/index')
 const { sequelize } = require('../models/index');
-const products = require('../models/products');
+const { Op } = require('sequelize');
 require('dotenv').config();
 
 
@@ -48,30 +48,10 @@ const GetProduct = async (req, res) => {
 
 }
 
-const AddCart = async (req, res) => {
-
-    try {
-        const updateUserData = await Buyers.update(
-            { inCart: sequelize.literal(`array_append("inCart", ${req.body.productId})`), },
-            { where: { id: req.body.BuyerId } }
-        );
-
-        if (updateUserData) {
-            res.status(200).json({ msg: "Product Added In Cart Successfully", success: true })
-        } else {
-            res.status(500).json({ msg: "Product Not Added In Cart", success: false })
-        }
-    } catch (Err) {
-        console.error('Error Found While Updating User Cart:', Err);
-        res.status(500).json({ msg: "Fail To Update User Cart", success: false })
-    }
-
-}
-
 const GetUserCart = async (req, res) => {
 
     try {
-        const userId = req.params.userId
+        const userId = req.params.BuyerId
 
         const userInfo = await Buyers.findOne({
             where: { id: userId }
@@ -94,10 +74,30 @@ const GetUserCart = async (req, res) => {
 
 }
 
+const AddCart = async (req, res) => {
+
+    try {
+        const updateUserData = await Buyers.update(
+            { inCart: sequelize.literal(`array_append("inCart", ${req.body.productId})`), },
+            { where: { id: req.body.BuyerId } }
+        );
+
+        if (updateUserData) {
+            res.status(200).json({ msg: "Product Added In Cart Successfully", success: true })
+        } else {
+            res.status(500).json({ msg: "Product Not Added In Cart", success: false })
+        }
+    } catch (Err) {
+        console.error('Error Found While Updating User Cart:', Err);
+        res.status(500).json({ msg: "Fail To Update User Cart", success: false })
+    }
+
+}
+
 const RemoveFromCart = async (req, res) => {
     try {
         let ProductId = req.body.productId
-        let UserId = req.body.userId
+        let UserId = req.body.BuyerId
 
         const updatedCustomer = await Buyers.update(
             { inCart: sequelize.literal(`array_remove("inCart", ${ProductId})`) },
@@ -116,34 +116,10 @@ const RemoveFromCart = async (req, res) => {
 
 }
 
-const AddWishlist = async (req, res) => {
-    try {
-
-        const updateUserData = await Buyers.update(
-            {
-                inWishlist: sequelize.literal(`array_append("inWishlist", ${req.body.productId})`),
-            },
-            {
-                where: { id: req.body.userId }
-            }
-        );
-
-        if (updateUserData) {
-            res.status(200).json({ msg: "Data Added In Wishlist Successfully", success: true })
-        } else {
-            res.status(500).json({ msg: "Data Not Added In Wishlist", success: false })
-        }
-    } catch (Err) {
-        console.log("Error Found While Adding In User Wishlist", Err)
-        res.status(500).json({ msg: "Fail to add in user wishlist", success: false })
-    }
-
-}
-
 const GetUserWishlist = async (req, res) => {
 
     try {
-        const userId = req.params.userId
+        const userId = req.params.BuyerId
         const userInfo = await Buyers.findOne({
             where: { id: userId }
         })
@@ -168,10 +144,34 @@ const GetUserWishlist = async (req, res) => {
     }
 }
 
+const AddWishlist = async (req, res) => {
+    try {
+        const userId = req.body.BuyerId
+        const updateUserData = await Buyers.update(
+            {
+                inWishlist: sequelize.literal(`array_append("inWishlist", ${req.body.productId})`),
+            },
+            {
+                where: { id: userId }
+            }
+        );
+
+        if (updateUserData) {
+            res.status(200).json({ msg: "Data Added In Wishlist Successfully", success: true })
+        } else {
+            res.status(500).json({ msg: "Data Not Added In Wishlist", success: false })
+        }
+    } catch (Err) {
+        console.log("Error Found While Adding In User Wishlist", Err)
+        res.status(500).json({ msg: "Fail to add in user wishlist", success: false })
+    }
+
+}
+
 const RemoveFromWishlist = async (req, res) => {
     try {
         let ProductId = req.body.productId
-        let UserId = req.body.userId
+        let UserId = req.body.BuyerId
 
         const updatedCustomer = await Buyers.update(
             { inWishlist: sequelize.literal(`array_remove("inWishlist", ${ProductId})`) },
@@ -232,18 +232,26 @@ const GetPurchaseSteps = async (req, res) => {
 
 const ListProductOrder = async (req, res) => {
     ProductInfo = req.body
+    // console.log(ProductInfo)
     try {
 
         const ListOrder = Orders.create({
             deliveryInfo: ProductInfo,
             orderedProduct: ProductInfo.productId,
-            orderBy: ProductInfo.userId
+            orderedBy: ProductInfo.BuyerId,
+            SellBy: ProductInfo.sellerId
         })
 
-        const updateUserData = await Buyers.update(
+        const updateBuyerData = await Buyers.update(
             { orders: sequelize.literal(`array_append("orders", ${ProductInfo.productId})`), },
-            { where: { id: ProductInfo.userId } }
+            { where: { id: ProductInfo.BuyerId } }
         );
+
+        const updateSellerData = await Sellers.update(
+            { orders: sequelize.literal(`array_append("orders", ${ProductInfo.productId})`), },
+            { where: { id: ProductInfo.sellerId } }
+        );
+
 
         if (ListOrder) {
             res.status(200).json({ msg: "Product Order Successfully", success: true })
@@ -258,7 +266,7 @@ const ListProductOrder = async (req, res) => {
 
 const GetUserOrders = async (req, res) => {
     try {
-        const userId = req.params.userId
+        const userId = req.params.BuyerId
         const userInfo = await Buyers.findOne({
             where: { id: userId }
         })
@@ -285,7 +293,7 @@ const GetUserOrders = async (req, res) => {
 const CancelOrder = async (req, res) => {
     try {
         let ProductId = req.body.productId
-        let UserId = req.body.userId
+        let UserId = req.body.BuyerId
 
         const updatedCustomer = await Buyers.update(
             { orders: sequelize.literal(`array_remove("orders", ${ProductId})`) },
@@ -312,9 +320,6 @@ const GetRelatedSearchSuggestion = async (req, res) => {
 
     try {
         const searchedKey = req.params.searchedKey
-
-        const { Op } = require('sequelize');
-
         const ProductInfo = await Products.findAll({
             where: {
                 name: {
@@ -342,7 +347,6 @@ const GetSearchedProducts = async (req, res) => {
 
     try {
         let searchedKey = req.params.searchedKey
-        console.log(searchedKey)
         const { Op } = require('sequelize');
 
         const ProductsInfo = await Products.findAll({
@@ -372,7 +376,6 @@ const GetFilterProducts = async (req, res) => {
 
     try {
         let FilterKeys = req.query;
-        console.log(FilterKeys);
 
         const { Op } = require('sequelize');
 
@@ -391,7 +394,6 @@ const GetFilterProducts = async (req, res) => {
             order: [['price', sortingOrder]]
         });
 
-        console.log(ProductsInfo)
         if (ProductsInfo) {
             res.status(200).json({ msg: "Successfull To Retrieve Searched Products", success: true, data: ProductsInfo })
         } else {

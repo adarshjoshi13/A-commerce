@@ -6,7 +6,7 @@ const { sequelize } = require('../models/index');
 require('dotenv').config();
 
 
-const Authentication = async (req, res) => {
+const BuyerAuthentication = async (req, res) => {
     let OTP = await Math.max(100001, Math.round(Math.random() * 999998))
 
     GetOtps.create({
@@ -58,8 +58,7 @@ const BuyerRegister = async (req, res) => {
                 full_name: req.body.name,
                 mobile: req.body.number,
                 email: req.body.email,
-                password: Password,
-                token: null
+                password: Password
             })
 
             if (RegisterCustomer) {
@@ -87,8 +86,8 @@ const BuyerRegister = async (req, res) => {
 
     } catch (err) {
 
-        console.log("errror found: ", err)
-        res.status(500).json({ error: 'Internal Server Error' })
+        console.log("Error Found While Registering Buyer", Err)
+        res.status(500).json({ error: `Fail To Register Buyer: ${Err}` })
 
     }
 
@@ -112,7 +111,7 @@ const BuyerLogin = async (req, res) => {
         });
 
         if (!user) {
-            return res.status(401).json({ msg: "Wrong Phone Number Or Email!", success: false });
+            return res.status(500).json({ msg: "Wrong Phone Number Or Email!", success: false });
         }
 
         const userhash = user.dataValues.password;
@@ -121,24 +120,24 @@ const BuyerLogin = async (req, res) => {
 
         if (passwordMatch) {
 
-            const token = await jwt.sign({ identifier }, process.env.SECRET_KEY, { expiresIn: '48h' });
+            const token = await jwt.sign({ identifier }, process.env.SECRET_KEY, { expiresIn: '1h' });
             res.status(200).json({
                 msg: "User Login Successfully!",
                 success: true,
                 data: { userToken: token, userData: user.dataValues }
             });
         } else {
-            res.status(401).json({ msg: "Wrong Password!", success: false });
+            res.status(500).json({ msg: "Wrong Password!", success: false });
         }
-    } catch (err) {
-        console.error('Error during login:', err);
-        res.status(500).json({ ERROR: err.message, success: false });
+    } catch (Err) {
+        console.log("Error Found While Sign In Buyer", Err)
+        res.status(500).json({ msg: `Fail To Sign In Buyer: ${Err}`, success: false })
     }
 };
 
 const GetUserData = async (req, res) => {
     try {
-        let userId = req.params.userId
+        let userId = req.params.BuyerId
 
         const getUserData = await Buyers.findOne({
             where: { id: userId }
@@ -156,48 +155,5 @@ const GetUserData = async (req, res) => {
     }
 }
 
-const SellerRegister = async (req, res) => {
-    try {
 
-    } catch (Err) {
-        console.log(Err)
-    }
-}
-
-// const VerifyUser = async (req, res) => {
-
-//     let token = req.body.token
-//     var isEmail = false;
-
-//     const userIdentifier = await jwt.verify(token, process.env.SECRET_KEY);
-//     let Identifier = userIdentifier.Identifiers
-
-//     for (const Identifiers of Identifier) {
-
-//         function asynchronousOperation(Identifier) {
-//             if (Identifiers == '@') {
-
-//                 isEmail = true
-//             }
-//         }
-//         await asynchronousOperation(Identifiers)
-
-//     }
-
-//     const CustomerInfo = await Buyers.findOne({
-//         where: isEmail ?
-//             { email: Identifier } : { mobile: Identifier }
-//     })
-
-//     if (CustomerInfo) {
-//         res.status(200).json({ msg: "User Verification Succesfull", success: true, data: CustomerInfo })
-//     } else {
-//         res.status(200).json({ msg: "User Verification UnSuccesfull", success: false })
-//     }
-
-
-
-
-// }
-
-module.exports = { Authentication, BuyerRegister, BuyerLogin, GetUserData, SellerRegister }
+module.exports = { BuyerAuthentication, BuyerRegister, BuyerLogin, GetUserData }

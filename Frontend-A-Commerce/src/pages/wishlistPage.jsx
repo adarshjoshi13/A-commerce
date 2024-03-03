@@ -8,11 +8,12 @@ export default function WishlistPage() {
 
     const [userWishlistProducts, setUserWishlistProducts] = useState([])
     const [loader, setLoader] = useState(false)
-    const [userId, setUserId] = useState(Cookies.get('userId'))
+    const cookies = Cookies.get()
+    const BuyerId = cookies.BuyerId
 
     const GetUserWishlistData = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/get-user-wishlist/${userId}`);
+            const response = await axios.get(`http://localhost:3000/get-user-wishlist/${BuyerId}`);
 
             if (response && response.data) {
                 setUserWishlistProducts(response.data.data);
@@ -27,13 +28,13 @@ export default function WishlistPage() {
 
 
     useEffect(() => {
-        if (userId) {
+        if (BuyerId) {
             GetUserWishlistData()
         } else {
             setLoader(true);
         }
 
-    }, [userId])
+    }, [BuyerId])
 
     const refreshPage = () => {
         GetUserWishlistData()

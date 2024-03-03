@@ -29,6 +29,8 @@ const ProductPage = () => {
         fetchData();
     }, []);
 
+
+
     const Products = () => {
         if (loading) {
             return <p>LOADING...</p>;
@@ -41,7 +43,9 @@ const ProductPage = () => {
         return (
             <ShowProduct
                 key={productData.id}
+                sellerId={productData.sellBy}
                 id={productData.id}
+                img={productData.images}
                 productName={productData.name}
                 productDescription={productData.description}
                 price={productData.price}

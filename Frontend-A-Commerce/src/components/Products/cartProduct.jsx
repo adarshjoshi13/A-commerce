@@ -3,12 +3,13 @@ import { Link } from "react-router-dom"
 import Cookies from "js-cookie"
 
 export default function CartProduct(props) {
-    const userId = Cookies.get('userId')
+    const coookies = Cookies.get()
+    const BuyerId = coookies.BuyerId
 
     const RemoveFromCart = async (ProductId) => {
         let productId = ProductId
         try {
-            const RemoveProduct = await axios.post('http://localhost:3000/remove-from-cart', { userId, productId }, {
+            const RemoveProduct = await axios.post('http://localhost:3000/remove-from-cart', { BuyerId, productId }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }

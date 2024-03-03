@@ -84,23 +84,44 @@ export default function ShowProduct(props) {
         }
 
     }
-
+    console.log()
 
     return (
         <div id={props.id} className="container my-5">
-
             <div className="row">
                 <div className="col-md-6">
-                    <img src={`./public/${props.id}.png`} className="img-fluid" alt={`${props.productName} Image`} />
+                    <div id={`carouselExampleFade-${props.id}`} className="carousel slide carousel-fade" data-bs-ride="carousel">
+                        <div className="carousel-inner">
+                            {props.img.map((value, index) => (
+                                <div key={index} className={`carousel-item${index === 0 ? ' active' : ''}`}>
+                                    <img src={value} className="show-product-img" alt={`Product Image ${index + 1}`} />
+                                </div>
+                            ))}
+                        </div>
+                        <button className="carousel-control-prev" type="button" data-bs-target={`#carouselExampleFade-${props.id}`} data-bs-slide="prev">
+                            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span className=""><i className="bi bi-chevron-compact-left text-black fw-bold fs-2"></i></span>
+                        </button>
+                        <button className="carousel-control-next" type="button" data-bs-target={`#carouselExampleFade-${props.id}`} data-bs-slide="next">
+                            <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span className=""><i className="bi bi-chevron-compact-right text-black fw-bold fs-2"></i></span>
+                        </button>
+                    </div>
                 </div>
                 <div className="col-md-6">
                     <h1 className="display-4">{props.productName}</h1>
                     <p className="lead">{props.productDescription}</p>
                     <p className="display-5 fw-bold">₹{props.price}</p>
                     <div className="d-flex justify-content-between align-items-center">
-                        <Link to={`/product-purchase/${props.id}`}>
-                            <button type="button" className="btn btn-primary">Buy Now</button>
-                        </Link>
+
+                        <button type="button" className="btn btn-primary" onClick={() => {
+                            if (BuyerId) {
+                                Naviagte(`/product-purchase/${props.id}/${props.sellerId}`)
+                            } else {
+                                Naviagte('/buyer-signin');
+                            }
+                        }}>Buy Now</button>
+
                         <div className="d-flex justify-content-between">
                             <button type="button" className="btn btn-primary mx-3" onClick={() => {
                                 if (BuyerId) {

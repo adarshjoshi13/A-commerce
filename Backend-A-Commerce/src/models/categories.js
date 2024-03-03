@@ -28,7 +28,6 @@ module.exports = function (sequelize) {
     }, {
         sequelize,
         tableName: 'categories',
-        logging: false,
         timestamps: false
     })
 }

@@ -82,7 +82,7 @@ const PurchasePage = () => {
                 console.log(formData)
                 const ListOrder = async () => {
                     try {
-                        const ListProductOrder = await axios.post('http://localhost:3000/list-product-order', { ...userId, ...Params, ...formData }, {
+                        const ListProductOrder = await axios.post('http://localhost:3000/list-product-order', { ...cookie, ...Params, ...formData }, {
                             headers: {
                                 'Content-Type': 'application/json'
                             }
