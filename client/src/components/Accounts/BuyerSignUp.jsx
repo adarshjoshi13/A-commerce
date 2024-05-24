@@ -20,7 +20,7 @@ export default function BuyerSignUp() {
 
   const Register = async (otp) => {
 
-    const response = await axios.post('http://localhost:3000/buyer-sign-up', { ...formData, OTP: otp }, {
+    const response = await axios.post('https://a-commerce-server.onrender.com/buyer-sign-up', { ...formData, OTP: otp }, {
       headers: {
         "Content-Type": "application/json"
       }
@@ -48,7 +48,7 @@ export default function BuyerSignUp() {
         if (formData.password !== formData.Cpassword) {
           throw "Password Mismatch"
         } else {
-          const response = await axios.post("http://localhost:3000/buyer-authentication", formData, {
+          const response = await axios.post("https://a-commerce-server.onrender.com/buyer-authentication", formData, {
             headers: {
               "Content-Type": "application/json"
             }

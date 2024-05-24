@@ -13,7 +13,7 @@ export default function MyOrders() {
 
     const GetUserOrdersData = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/get-user-orders/${BuyerId}`);
+            const response = await axios.get(`https://a-commerce-server.onrender.com/get-user-orders/${BuyerId}`);
 
             if (response && response.data) {
                 setUserOrderedProducts(response.data.data);

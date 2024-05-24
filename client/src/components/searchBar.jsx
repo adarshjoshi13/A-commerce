@@ -10,7 +10,7 @@ export default function SearchBar() {
 
     const getSearchResult = async (key) => {
         try {
-            const relatedSearchData = await axios.get(`http://localhost:3000/get-search-result/${key}`);
+            const relatedSearchData = await axios.get(`https://a-commerce-server.onrender.com/get-search-result/${key}`);
             setSearchRelatedResults(relatedSearchData.data.data || []);
         } catch (error) {
             console.error("Error fetching search results:", error);

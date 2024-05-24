@@ -13,7 +13,7 @@ const SearchResultPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/get-searched-products/${Params.searchedKey}`);
+                const response = await axios.get(`https://a-commerce-server.onrender.com/get-searched-products/${Params.searchedKey}`);
 
                 if (response.data) {
                     setProductsData(response.data.data);

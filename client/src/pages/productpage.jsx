@@ -14,7 +14,7 @@ const ProductPage = () => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/get-product/${Params.id}`);
+            const response = await axios.get(`https://a-commerce-server.onrender.com/get-product/${Params.id}`);
 
             if (response.data.productData) {
                 setProductData(response.data.productData);

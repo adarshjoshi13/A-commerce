@@ -27,7 +27,7 @@ export default function BuyerSignIn() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/buyer-sign-in', FormData, {
+            const response = await axios.post('https://a-commerce-server.onrender.com/buyer-sign-in', FormData, {
                 headers: {
                     "Content-Type": "application/json"
                 }

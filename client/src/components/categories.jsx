@@ -8,7 +8,7 @@ export default function Categories() {
 
     const GetCategories = async () => {
         try {
-            const Categories = await axios.get(`http://localhost:3000/get-categories`);
+            const Categories = await axios.get(`https://a-commerce-server.onrender.com/get-categories`);
 
             if (Categories) {
                 setcategoriesData(Categories.data.data);

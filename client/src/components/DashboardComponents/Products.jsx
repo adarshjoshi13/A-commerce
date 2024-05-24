@@ -22,7 +22,7 @@ export default function Products(props) {
   useEffect(() => {
     const ProductIds = props.SellerInfo.products
     const GetProducts = async () => {
-      const response = await axios.get(`http://localhost:3000/get-listed-products`, {
+      const response = await axios.get(`https://a-commerce-server.onrender.com/get-listed-products`, {
         params: {
           productIds: ProductIds,
         },
@@ -92,7 +92,7 @@ export default function Products(props) {
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/add-product', formData, {
+      const response = await axios.post('https://a-commerce-server.onrender.com/add-product', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -115,7 +115,7 @@ export default function Products(props) {
 
   const RemoveProductFromList = async (ProductId)=> {
     
-    const response = await axios.post('http://localhost:3000/remove-product-from-list', {ProductId, SellerId}, {
+    const response = await axios.post('https://a-commerce-server.onrender.com/remove-product-from-list', {ProductId, SellerId}, {
       headers: {'Content-Type': 'application/json'}
     })
 

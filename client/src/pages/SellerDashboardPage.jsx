@@ -16,7 +16,7 @@ function SellerDashboardPage({ children }) {
 
 
     const GetSellerInfo = async () => {
-        const response = await axios.get(`http://localhost:3000/get-seller-info/${SellerId}`)
+        const response = await axios.get(`https://a-commerce-server.onrender.com/get-seller-info/${SellerId}`)
 
         if (response.data.success) {
             setSellerInfo(response.data.data)

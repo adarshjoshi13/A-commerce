@@ -13,7 +13,7 @@ export default function OrderedProduct(props) {
 
         let productId = ProductId
         try {
-            const RemoveWishlist = await axios.post('http://localhost:3000/cancel-order', { BuyerId, productId }, {
+            const RemoveWishlist = await axios.post('https://a-commerce-server.onrender.com/cancel-order', { BuyerId, productId }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }

@@ -12,7 +12,7 @@ export default function ShowProduct(props) {
 
     const GetUserData = async () => {
         try {
-            const userData = await axios.get(`http://localhost:3000/get-user-data/${BuyerId}`);
+            const userData = await axios.get(`https://a-commerce-server.onrender.com/get-user-data/${BuyerId}`);
             if (BuyerId) {
                 setUserWishlistData(userData.data.data.inWishlist);
             }
@@ -34,7 +34,7 @@ export default function ShowProduct(props) {
 
     const AddCart = async (id) => {
         try {
-            const UpdateUserCart = await axios.post('http://localhost:3000/add-to-cart', { productId: id, BuyerId }, {
+            const UpdateUserCart = await axios.post('https://a-commerce-server.onrender.com/add-to-cart', { productId: id, BuyerId }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -50,7 +50,7 @@ export default function ShowProduct(props) {
     const AddWishlist = async (id) => {
 
         try {
-            const UpdateUserWishlist = await axios.post('http://localhost:3000/add-wishlist', { productId: id, BuyerId }, {
+            const UpdateUserWishlist = await axios.post('https://a-commerce-server.onrender.com/add-wishlist', { productId: id, BuyerId }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -69,7 +69,7 @@ export default function ShowProduct(props) {
     const RemoveFromWishlist = async (ProductId) => {
         let productId = ProductId
         try {
-            const RemoveWishlist = await axios.post('http://localhost:3000/remove-from-wishlist', { BuyerId, productId }, {
+            const RemoveWishlist = await axios.post('https://a-commerce-server.onrender.com/remove-from-wishlist', { BuyerId, productId }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }

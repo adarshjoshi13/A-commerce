@@ -12,7 +12,7 @@ export default function WishlistProduct(props) {
     const RemoveFromWishlist = async (ProductId) => {
         let productId = ProductId
         try {
-            const RemoveWishlist = await axios.post('http://localhost:3000/remove-from-wishlist', { BuyerId, productId }, {
+            const RemoveWishlist = await axios.post('https://a-commerce-server.onrender.com/remove-from-wishlist', { BuyerId, productId }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
