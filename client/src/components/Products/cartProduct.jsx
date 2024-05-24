@@ -9,7 +9,7 @@ export default function CartProduct(props) {
     const RemoveFromCart = async (ProductId) => {
         let productId = ProductId
         try {
-            const RemoveProduct = await axios.post('http://localhost:3000/remove-from-cart', { BuyerId, productId }, {
+            const RemoveProduct = await axios.post('https://a-commerce-server.onrender.com/remove-from-cart', { BuyerId, productId }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }

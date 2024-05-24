@@ -11,7 +11,7 @@ const FilterResultPage = () => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/get-filter-products/?name=${FilterKeys.searchedKey}&sort=${FilterKeys.sort}`);
+            const response = await axios.get(`https://a-commerce-server.onrender.com/get-filter-products/?name=${FilterKeys.searchedKey}&sort=${FilterKeys.sort}`);
             if (response.data) {
                 setProductsData(response.data.data);
                 setLoading(false)

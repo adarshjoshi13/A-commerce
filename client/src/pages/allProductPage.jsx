@@ -13,7 +13,7 @@ const AllProducts = () => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/get-products/${Params.catId}`);
+            const response = await axios.get(`https://a-commerce-server.onrender.com/get-products/${Params.catId}`);
 
             if (response.data) {
                 setProductData(response.data.ProductsData);

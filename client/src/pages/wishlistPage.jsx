@@ -13,7 +13,7 @@ export default function WishlistPage() {
 
     const GetUserWishlistData = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/get-user-wishlist/${BuyerId}`);
+            const response = await axios.get(`https://a-commerce-server.onrender.com/get-user-wishlist/${BuyerId}`);
 
             if (response && response.data) {
                 setUserWishlistProducts(response.data.data);

@@ -11,7 +11,7 @@ export default function CartProducts() {
 
     const getUserCartData = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/get-user-cart/${BuyerId}`);
+            const response = await axios.get(`https://a-commerce-server.onrender.com/get-user-cart/${BuyerId}`);
             
             if (response && response.data) {
                 setUserCartSelectedProducts(response.data.data);

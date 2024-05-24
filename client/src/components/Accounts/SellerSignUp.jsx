@@ -30,7 +30,7 @@ export default function BuyerSignUp() {
             if (formData.password !== formData.Cpassword) {
                 throw "Password Mismatch"
             } else {
-                const response = await axios.post('http://localhost:3000/seller-sign-up ', { ...formData }, {
+                const response = await axios.post('https://a-commerce-server.onrender.com/seller-sign-up ', { ...formData }, {
                     headers: {
                         "Content-Type": "application/json"
                     }

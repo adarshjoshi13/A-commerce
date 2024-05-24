@@ -16,7 +16,7 @@ export default function Verification() {
 
         console.log("run")
 
-        const response = await axios.put(`http://localhost:3000/verify-seller/${VerificationToken}`)
+        const response = await axios.put(`https://a-commerce-server.onrender.com/verify-seller/${VerificationToken}`)
 
         if (response.data.success) {
             setMsg(response.data.msg)

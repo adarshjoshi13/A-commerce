@@ -27,7 +27,7 @@ const PurchasePage = () => {
 
     const getPurhcaseSteps = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/get-purchase-form');
+            const response = await axios.get('https://a-commerce-server.onrender.com/get-purchase-form');
             setPurchaseForm(response.data.StepsFormdata);
         } catch (error) {
             console.error("Error fetching purchase form:", error);
@@ -82,7 +82,7 @@ const PurchasePage = () => {
                 console.log(formData)
                 const ListOrder = async () => {
                     try {
-                        const ListProductOrder = await axios.post('http://localhost:3000/list-product-order', { ...cookie, ...Params, ...formData }, {
+                        const ListProductOrder = await axios.post('https://a-commerce-server.onrender.com/list-product-order', { ...cookie, ...Params, ...formData }, {
                             headers: {
                                 'Content-Type': 'application/json'
                             }
