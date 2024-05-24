@@ -243,7 +243,7 @@ export default function Products(props) {
                     >
                       {props.categories.map((value) => (
                         <option key={value.id} value={value.id}>
-                          {value.name}
+                          {value.name.replace(/^\w/, (c) => c.toUpperCase())}
                         </option>
                       ))}
                     </select>
